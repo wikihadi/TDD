@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import store from './store/index';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import { routes } from './routes';
@@ -38,5 +39,6 @@ const app = new Vue({
         rtl: true,
         theme: { dark: false },
     }),
-    router
+    router,
+    store
 });

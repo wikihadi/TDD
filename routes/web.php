@@ -26,20 +26,18 @@ Auth::routes();
 Route::get('/home',function (){
     return redirect('dashboard');
 });
-Route::get('/markAsRead', function (){
-    auth()->user()->unReadNotifications->markAsRead();
-    return redirect()->back();
-});
-//Route::get('/{any}', 'DashboardController@index')->where('any' , 'dashboard');
-//Route::get('/dashboard/{any}', 'DashboardController@index')->where('any' , '.*');
-Route::get('/dashboard/{vue_capture?}', function () {
-    $user = Auth::user();
-    $activity = new Activity([
-        'note'   => 'ورود',
-        'user_id'   => $user->id,
-        'url'   => 'dashboard',
-    ]);
-    $activity->save();
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/dashboard/{vue_capture?}', function () {
+        $user = Auth::user();
+        $activity = new Activity([
+            'note'   => 'ورود',
+            'user_id'   => $user->id,
+            'url'   => 'dashboard',
+        ]);
+        $activity->save();
 //    Notification::send($user, new newUserRegistered($activity));
-    return view('dashboard');
-})->where('vue_capture', '[\/\w\.-]*');
+        return view('dashboard');
+    })->where('vue_capture', '[\/\w\.-]*');
+
+});

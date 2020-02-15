@@ -80,6 +80,25 @@
 
 
                 </v-list-item-group>
+                    <v-list-group
+                    >
+                        <template v-slot:activator>
+                            <v-list-item-title class="text-right">مدیریت</v-list-item-title>
+                        </template>
+                        <router-link to="/dashboard/admin/users">
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">کاربران</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-account-group</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                        </router-link>
+
+                    </v-list-group>
+
 
 
             </v-list>
