@@ -8,28 +8,28 @@
         >
             <v-list dense shaped>
                 <v-list-item-group color="primary">
-                <router-link to="/dashboard">
-                    <v-list-item @click="">
-                        <v-list-item-content>
-                            <v-list-item-title class="text-right">داشبورد</v-list-item-title>
-                        </v-list-item-content>
-                        <v-spacer></v-spacer>
-                        <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
-                        </v-list-item-action>
-                    </v-list-item>
-                </router-link>
-                <router-link to="/dashboard/timer">
-                    <v-list-item @click="">
-                        <v-list-item-content>
-                            <v-list-item-title class="text-right">تایمر</v-list-item-title>
-                        </v-list-item-content>
-                        <v-spacer></v-spacer>
-                        <v-list-item-action>
-                            <v-icon>mdi-timer</v-icon>
-                        </v-list-item-action>
-                    </v-list-item>
-                </router-link>
+                    <router-link to="/dashboard">
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">داشبورد</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-home</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
+                    <router-link to="/dashboard/timer">
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">تایمر</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-timer</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
 
                     <v-list-group
                     >
@@ -50,16 +50,16 @@
                     </v-list-group>
 
                     <router-link to="/dashboard/fin">
-                    <v-list-item @click="">
-                        <v-list-item-content>
-                            <v-list-item-title class="text-right">مالی</v-list-item-title>
-                        </v-list-item-content>
-                        <v-spacer></v-spacer>
-                        <v-list-item-action>
-                            <v-icon>mdi-currency-usd</v-icon>
-                        </v-list-item-action>
-                    </v-list-item>
-                </router-link>
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">مالی</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-currency-usd</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
 
                     <v-list-group
                     >
@@ -80,6 +80,25 @@
 
 
                 </v-list-item-group>
+                <v-list-group
+                >
+                    <template v-slot:activator>
+                        <v-list-item-title class="text-right">مدیریت</v-list-item-title>
+                    </template>
+                    <router-link to="/dashboard/admin/users">
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">کاربران</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-account-group</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
+
+                </v-list-group>
+
 
 
             </v-list>
@@ -96,28 +115,28 @@
             <v-toolbar-title>داشبورد</v-toolbar-title>
             <v-spacer />
             <!--<v-text-field-->
-                <!--solo-inverted-->
-                <!--flat-->
-                <!--hide-details-->
-                <!--label="جستجو در کارها"-->
-                <!--dark-->
-                <!--prepend-inner-icon="mdi-search"-->
-                <!--v-model="search"-->
+            <!--solo-inverted-->
+            <!--flat-->
+            <!--hide-details-->
+            <!--label="جستجو در کارها"-->
+            <!--dark-->
+            <!--prepend-inner-icon="mdi-search"-->
+            <!--v-model="search"-->
             <!--/>-->
 
             <notification :user="user"></notification>
 
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             <!--<template v-slot:extension>-->
-                <!--<v-tabs-->
-                    <!--background-color="transparent"-->
-                    <!--right-->
-                    <!--icons-and-text-->
-                <!--&gt;-->
-                    <!--<v-tab><v-icon>mdi-label</v-icon></v-tab>-->
-                    <!--<v-tab><v-icon>mdi-label</v-icon></v-tab>-->
-                    <!--<v-tab><v-icon>mdi-phone</v-icon></v-tab>-->
-                <!--</v-tabs>-->
+            <!--<v-tabs-->
+            <!--background-color="transparent"-->
+            <!--right-->
+            <!--icons-and-text-->
+            <!--&gt;-->
+            <!--<v-tab><v-icon>mdi-label</v-icon></v-tab>-->
+            <!--<v-tab><v-icon>mdi-label</v-icon></v-tab>-->
+            <!--<v-tab><v-icon>mdi-phone</v-icon></v-tab>-->
+            <!--</v-tabs>-->
             <!--</template>-->
         </v-app-bar>
 
@@ -134,7 +153,7 @@
                         >
                     </v-avatar>
                     <!--<v-list-item-content>-->
-                        <!--<v-list-item-title>{{user.name}}</v-list-item-title>-->
+                    <!--<v-list-item-title>{{user.name}}</v-list-item-title>-->
                     <!--</v-list-item-content>-->
                 </v-list-item>
             </v-list>
@@ -152,7 +171,7 @@
         </v-navigation-drawer>
 
         <v-content>
-                        <router-view></router-view>
+            <router-view></router-view>
         </v-content>
 
         <v-navigation-drawer
@@ -196,7 +215,7 @@
         }),
         mounted: function () {
 
-        // this.changeRTL()
+            // this.changeRTL()
 
         },
         methods: {

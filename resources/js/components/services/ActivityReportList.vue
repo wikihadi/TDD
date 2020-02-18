@@ -10,21 +10,19 @@
                 <span>بروزرسانی خودکار</span>
             </v-tooltip>
         </v-subheader>
-
-
-        <!--<v-expansion-panels flat>-->
-            <!--<v-expansion-panel>-->
-                <!--<v-expansion-panel-header>فیلتر</v-expansion-panel-header>-->
-                <!--<v-expansion-panel-content>-->
-                    <!--<v-switch v-model="switch1" :label="`فقط نظرات`"></v-switch>-->
-                    <!--<v-switch v-model="switch2" :label="`فقط نظرات من`"></v-switch>-->
-                    <!--<v-switch v-model="switch2" :label="`نظرات را نمایش نده`"></v-switch>-->
-
-                <!--</v-expansion-panel-content>-->
-            <!--</v-expansion-panel>-->
-        <!--</v-expansion-panels>-->
-
-
+        <!--<v-chip-->
+            <!--class="ma-2"-->
+            <!--color="primary"-->
+            <!--text-color="white"-->
+        <!--&gt;-->
+            <!--<v-avatar-->
+                <!--left-->
+                <!--class="indigo"-->
+            <!--&gt;-->
+                <!--{{items.length}}-->
+            <!--</v-avatar>-->
+            <!--کاربر-->
+        <!--</v-chip>-->
 
 
         <v-skeleton-loader
@@ -39,13 +37,14 @@
             style="max-height: 70vh"
             class="overflow-y-auto"
             dark
+            v-else
         >
         <template v-for="(item, index) in items" class="overflow-hidden">
               <v-list-item
                 :key="index"
                 @click="" v-on="on"
             >
-                <v-list-item-avatar>
+                <v-list-item-avatar v-if="item.user">
                     <v-img :src="'/storage/avatar/' + item.user.avatar"></v-img>
                 </v-list-item-avatar>
 
@@ -77,7 +76,7 @@
             timeToInterval:''
         }),
         mounted() {
-              this.intervalSwap()
+              this.read()
         },
         methods:{
             intervalSwap(){

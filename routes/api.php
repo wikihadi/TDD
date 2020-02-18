@@ -29,3 +29,7 @@ Route::get('activity/read','ActivityController@read');
 Route::get('notification/read','NotificationController@read');
 Route::get('notification/markAllAsRead','NotificationController@markAllAsRead');
 
+
+//Admin
+Route::get('admin/users/get','UserController@usersGet');
+Route::get('admin/users/del','UserController@destroy');

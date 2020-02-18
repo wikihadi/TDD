@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Stmt\Return_;
 
 class ActivityController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +22,9 @@ class ActivityController extends Controller
 
     public function read()
     {
-        $activities = Activity::where('code', '>' , 0)->with('user')->latest()->get();
+//        $u = auth()->id();
+//        dd($u);
+        $activities = Activity::where('code', '>' , 0)->where('user_id',3)->with('user')->whereHas('user')->latest()->get();
         foreach ($activities as $key => $loop) {
             $loop->jd = verta($loop->updated_at)->formatJalaliDatetime();
             $loop->diff = verta($loop->updated_at)->formatDifference();
