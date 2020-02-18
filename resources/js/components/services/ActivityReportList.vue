@@ -33,12 +33,15 @@
             v-if="items.length<=0"
         >
         </v-skeleton-loader>
+
         <v-container
             style="max-height: 70vh"
             class="overflow-hidden"
             dark
             v-else
+
         >
+
         <template v-for="(item, index) in items" class="overflow-hidden">
               <v-list-item
                 :key="index"
