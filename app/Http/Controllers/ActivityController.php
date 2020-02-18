@@ -22,7 +22,8 @@ class ActivityController extends Controller
 
     public function read()
     {
-        $activities = Activity::where('code', '>' , 0)->where('user_id',$_GET['uId'])->with('user')->whereHas('user')->latest()->get();
+        $qty=$_GET['qty'];
+        $activities = Activity::where('code', '>' , 0)->where('user_id',$_GET['uId'])->with('user')->whereHas('user')->latest()->take($qty)->get();
         foreach ($activities as $key => $loop) {
             $loop->jd = verta($loop->updated_at)->formatJalaliDatetime();
             $loop->diff = verta($loop->updated_at)->formatDifference();

@@ -9,6 +9,7 @@
                     class="ma-2"
                     color="primary"
                     text-color="white"
+                    @click="read"
                 >
                     <v-avatar
                         left
@@ -17,6 +18,11 @@
                         {{users.all.length}}
                     </v-avatar>
                     کاربر
+                    <!--<v-avatar-->
+                        <!--right-->
+                    <!--&gt;-->
+                        <!--<v-icon>mdi-refresh</v-icon>-->
+                    <!--</v-avatar>-->
                 </v-chip></v-subheader>
                 <v-row>
                     <v-col
@@ -73,8 +79,8 @@
                                             <v-card-text>آیا از حذف {{user.name}} اطمینان دارید؟</v-card-text>
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
-                                                <v-btn color="green darken-1" text @click="dialog = false">خیر</v-btn>
-                                                <v-btn color="green darken-1" text @click="dialog = false,del(user.id)"><v-icon color="warning" dark>mdi-account-cancel</v-icon></v-btn>
+                                                <v-btn icon color="green darken-1" text @click="dialog = false">خیر</v-btn>
+                                                <v-btn icon color="green darken-1" text @click="dialog = false,delete_id=user.id,del()"><v-icon color="warning" dark>mdi-account-cancel</v-icon></v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </v-dialog>
@@ -98,7 +104,10 @@
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             show: false,
             dialog: false,
-            users:[]
+            users:[],
+            delete_id:'',
+            user_id:document.head.querySelector("meta[name=user_id]").content,
+            user_name:document.head.querySelector("meta[name=user_name]").content,
         }),
         mounted() {
             this.read()
@@ -114,15 +123,49 @@
                         console.log(error)
                     });
             },
-            del(id) {
-                axios.get('/api/admin/users/del?id=' + id)
+            // del(id) {
+            //     axios.get('/api/admin/users/del?id=' + id + '&user_id=' + this.user_id + '$user_name=' + this.user_name)
+            //         .then(
+            //             this.read()
+            //         )
+            //         .catch(function (error) {
+            //             console.log(error)
+            //         });
+            // },
+
+            del() {
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                };
+
+
+                let formData = new FormData();
+
+                formData.append('del_id', this.delete_id);
+                formData.append('_token', this.csrf);
+                formData.append('user_id', this.user_id);
+                formData.append('user_name', this.user_name);
+
+
+                axios.post('/api/admin/users/del', formData, config)
                     .then(
-                        this.read()
+                        response =>
+                            this.users = response.data
                     )
                     .catch(function (error) {
                         console.log(error)
                     });
             },
+            //
+            // del(id) {
+            //     axios.post('/api/admin/users/del')
+            //         .then(
+            //             response => this.users = response.data
+            //         )
+            //         .catch(function (error) {
+            //             console.log(error)
+            //         });
+            // },
         }
     }
 </script>

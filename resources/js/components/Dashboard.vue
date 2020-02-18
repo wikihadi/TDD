@@ -158,7 +158,7 @@
                 </v-list-item>
             </v-list>
             <!--Activity Report List-->
-            <activity-report-list :qty="30" :user="this.user"></activity-report-list>
+            <activity-report-list :qty="10" :user="this.user"></activity-report-list>
         </v-navigation-drawer>
 
         <v-navigation-drawer

@@ -2714,6 +2714,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Users",
   data: function data() {
@@ -2721,7 +2727,10 @@ __webpack_require__.r(__webpack_exports__);
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       show: false,
       dialog: false,
-      users: []
+      users: [],
+      delete_id: '',
+      user_id: document.head.querySelector("meta[name=user_id]").content,
+      user_name: document.head.querySelector("meta[name=user_name]").content
     };
   },
   mounted: function mounted() {
@@ -2737,11 +2746,44 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    del: function del(id) {
-      axios.get('/api/admin/users/del?id=' + id).then(this.read())["catch"](function (error) {
+    // del(id) {
+    //     axios.get('/api/admin/users/del?id=' + id + '&user_id=' + this.user_id + '$user_name=' + this.user_name)
+    //         .then(
+    //             this.read()
+    //         )
+    //         .catch(function (error) {
+    //             console.log(error)
+    //         });
+    // },
+    del: function del() {
+      var _this2 = this;
+
+      var config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      };
+      var formData = new FormData();
+      formData.append('del_id', this.delete_id);
+      formData.append('_token', this.csrf);
+      formData.append('user_id', this.user_id);
+      formData.append('user_name', this.user_name);
+      axios.post('/api/admin/users/del', formData, config).then(function (response) {
+        return _this2.users = response.data;
+      })["catch"](function (error) {
         console.log(error);
       });
-    }
+    } //
+    // del(id) {
+    //     axios.post('/api/admin/users/del')
+    //         .then(
+    //             response => this.users = response.data
+    //         )
+    //         .catch(function (error) {
+    //             console.log(error)
+    //         });
+    // },
+
   }
 });
 
@@ -2856,7 +2898,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.read();
+    this.intervalSwap();
   },
   methods: {
     intervalSwap: function intervalSwap() {
@@ -58811,7 +58853,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("activity-report-list", { attrs: { qty: 30, user: this.user } })
+          _c("activity-report-list", { attrs: { qty: 10, user: this.user } })
         ],
         1
       ),
@@ -59670,7 +59712,8 @@ var render = function() {
                     "v-chip",
                     {
                       staticClass: "ma-2",
-                      attrs: { color: "primary", "text-color": "white" }
+                      attrs: { color: "primary", "text-color": "white" },
+                      on: { click: _vm.read }
                     },
                     [
                       _c(
@@ -59684,7 +59727,7 @@ var render = function() {
                           )
                         ]
                       ),
-                      _vm._v("\n                کاربر\n            ")
+                      _vm._v("\n                کاربر\n                ")
                     ],
                     1
                   )
@@ -59870,6 +59913,7 @@ var render = function() {
                                                             "v-btn",
                                                             {
                                                               attrs: {
+                                                                icon: "",
                                                                 color:
                                                                   "green darken-1",
                                                                 text: ""
@@ -59889,6 +59933,7 @@ var render = function() {
                                                             "v-btn",
                                                             {
                                                               attrs: {
+                                                                icon: "",
                                                                 color:
                                                                   "green darken-1",
                                                                 text: ""
@@ -59898,9 +59943,9 @@ var render = function() {
                                                                   $event
                                                                 ) {
                                                                   ;(_vm.dialog = false),
-                                                                    _vm.del(
-                                                                      user.id
-                                                                    )
+                                                                    (_vm.delete_id =
+                                                                      user.id),
+                                                                    _vm.del()
                                                                 }
                                                               }
                                                             },
@@ -60071,7 +60116,7 @@ var render = function() {
             : _c(
                 "v-container",
                 {
-                  staticClass: "overflow-y-auto",
+                  staticClass: "overflow-hidden",
                   staticStyle: { "max-height": "70vh" },
                   attrs: { dark: "" }
                 },

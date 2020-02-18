@@ -4,6 +4,7 @@ import Vuetify from 'vuetify';
 import { routes } from './routes';
 
 
+
 require('./bootstrap');
 
 window.Vue = require('vue');

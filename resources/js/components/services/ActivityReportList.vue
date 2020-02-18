@@ -35,7 +35,7 @@
         </v-skeleton-loader>
         <v-container
             style="max-height: 70vh"
-            class="overflow-y-auto"
+            class="overflow-hidden"
             dark
             v-else
         >
@@ -73,10 +73,10 @@
             loading: false,
             transition: 'scale-transition',
             items:[],
-            timeToInterval:''
+            timeToInterval:'',
         }),
         mounted() {
-              this.read()
+              this.intervalSwap()
         },
         methods:{
             intervalSwap(){
