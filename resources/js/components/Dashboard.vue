@@ -96,6 +96,17 @@
                             </v-list-item-action>
                         </v-list-item>
                     </router-link>
+                    <router-link to="/dashboard/admin/roles">
+                        <v-list-item @click="">
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">نقش کاربری</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-account-settings</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </router-link>
 
                 </v-list-group>
 
