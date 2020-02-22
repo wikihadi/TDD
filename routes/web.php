@@ -16,6 +16,8 @@ use App\Notifications\newUserRegistered;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 //Route::group(['middleware' => 'web'], function () {
 

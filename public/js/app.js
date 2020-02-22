@@ -2859,6 +2859,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Role",
   data: function data() {
@@ -2879,52 +2937,70 @@ __webpack_require__.r(__webpack_exports__);
         return v.length <= 25 || 'سقف تعداد کاراکتر پر شد';
       }],
       search: '',
-      roles: [{
-        name: 'super-admin'
-      }, {
-        name: 'admin'
-      }],
-      per: [{
-        name: 'can-task-edt'
-      }, {
-        name: 'can-delete-task'
-      }]
+      all: [],
+      snackbarText: '',
+      snackbar: false,
+      timeout: 2000,
+      snackbarBg: '',
+      snackbarBtn: 'blue',
+      dialogPermission: false
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    this.read(1);
+  },
   methods: {
-    read: function read() {
+    snackbarOn: function snackbarOn(t, bg, btn, timeout) {
+      this.snackbarText = t;
+      this.snackbarBg = bg;
+      this.snackbarBtn = btn;
+      this.timeout = timeout;
+      this.snackbar = true;
+      this.timeout = 2000;
+    },
+    read: function read(x) {
       var _this = this;
 
-      axios.get('/api/admin/users/roles/get').then(function (response) {
-        return _this.roles = response.data;
+      axios.get('/api/admin/users/rolePer/get').then(function (response) {
+        return _this.all = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
-    } // del() {
-    //     const config = {
-    //         headers: { 'content-type': 'multipart/form-data' }
-    //     };
-    //
-    //
-    //     let formData = new FormData();
-    //
-    //     formData.append('del_id', this.delete_id);
-    //     formData.append('_token', this.csrf);
-    //     formData.append('user_id', this.user_id);
-    //     formData.append('user_name', this.user_name);
-    //
-    //
-    //     axios.post('/api/admin/users/del', formData, config)
-    //         .then(
-    //             response =>
-    //                 this.users = response.data
-    //         )
-    //         .catch(function (error) {
-    //             console.log(error)
-    //         });
-    // },
 
+      if (x === 1) {
+        this.snackbarOn('اطلاعات نقش کاربری و دسترسی ها با موفقیت دریافت شد', 'cyan darken-2', 'light');
+      }
+    },
+    submitPer: function submitPer() {
+      var config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      };
+      var formData = new FormData();
+      formData.append('name', this.titlePer);
+      formData.append('_token', this.csrf);
+      formData.append('user_id', this.user_id);
+      formData.append('user_name', this.user_name);
+      axios.post('/api/admin/users/rolePer/addPer', formData, config).then(this.read(0), this.addPer = false, this.snackbarOn('دسترسی با موفقیت افزوده شد', 'dark', 'green', 2000))["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    delPer: function delPer(id, name) {
+      var config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      };
+      var formData = new FormData();
+      formData.append('del_id', id);
+      formData.append('_token', this.csrf);
+      formData.append('user_id', this.user_id);
+      formData.append('user_name', this.user_name);
+      axios.post('/api/admin/users/rolePer/delPer', formData, config).then(this.read(0), this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -60054,6 +60130,36 @@ var render = function() {
     { attrs: { fluid: "" } },
     [
       _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.timeout, color: _vm.snackbarBg, left: true },
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _vm._v("\n        " + _vm._s(_vm.snackbarText) + "\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: _vm.snackbarBtn, text: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            بستن\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "v-item-group",
         [
           _c(
@@ -60062,7 +60168,7 @@ var render = function() {
               _c(
                 "v-subheader",
                 [
-                  _vm._v("مدیریت کاربران\n                "),
+                  _vm._v("\n                مدیریت کاربران\n                "),
                   _c(
                     "v-chip",
                     {
@@ -60081,7 +60187,7 @@ var render = function() {
                         [
                           _vm._v(
                             "\n                        " +
-                              _vm._s(_vm.roles.length) +
+                              _vm._s(_vm.all.roles.length) +
                               "\n                    "
                           )
                         ]
@@ -60109,12 +60215,57 @@ var render = function() {
                         [
                           _vm._v(
                             "\n                        " +
-                              _vm._s(_vm.per.length) +
+                              _vm._s(_vm.all.permissions.length) +
                               "\n                    "
                           )
                         ]
                       ),
                       _vm._v("\n                    دسترسی\n                ")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    { attrs: { icon: "", text: "" } },
+                    [
+                      _c(
+                        "v-icon",
+                        {
+                          attrs: { color: "eee" },
+                          on: {
+                            click: function($event) {
+                              return _vm.read(1)
+                            }
+                          }
+                        },
+                        [_vm._v("mdi-refresh")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    { attrs: { to: "/dashboard/admin/help" } },
+                    [
+                      _c(
+                        "v-btn",
+                        { attrs: { icon: "", text: "" } },
+                        [
+                          _c(
+                            "v-icon",
+                            {
+                              attrs: { color: "eee" },
+                              on: { click: function($event) {} }
+                            },
+                            [_vm._v("mdi-lifebuoy")]
+                          )
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
@@ -60542,7 +60693,9 @@ var render = function() {
                                           _vm._v(" "),
                                           _c(
                                             "tbody",
-                                            _vm._l(_vm.roles, function(item) {
+                                            _vm._l(_vm.all.roles, function(
+                                              item
+                                            ) {
                                               return _c(
                                                 "tr",
                                                 { key: item.name },
@@ -60609,7 +60762,7 @@ var render = function() {
                                   ],
                                   null,
                                   false,
-                                  3062190300
+                                  4052458483
                                 )
                               })
                             ],
@@ -60755,39 +60908,49 @@ var render = function() {
                                               }
                                             },
                                             [
-                                              _c("v-subheader", [
-                                                _vm._v("فرم دسترسی")
-                                              ]),
-                                              _vm._v(" "),
                                               _c(
                                                 "v-list-item",
                                                 [
-                                                  _c(
-                                                    "v-list-item-content",
-                                                    [
-                                                      _c("v-text-field", {
-                                                        attrs: {
-                                                          rules: _vm.rulesPer,
-                                                          counter: "25",
-                                                          label:
-                                                            "عنوان دسترسی را وارد کنید",
-                                                          hint:
-                                                            "فقط نام انگلیسی وارد کنید",
-                                                          outlined: ""
-                                                        },
-                                                        model: {
-                                                          value: _vm.titlePer,
-                                                          callback: function(
-                                                            $$v
+                                                  _c("v-list-item-content", [
+                                                    _c(
+                                                      "form",
+                                                      {
+                                                        on: {
+                                                          submit: function(
+                                                            $event
                                                           ) {
-                                                            _vm.titlePer = $$v
-                                                          },
-                                                          expression: "titlePer"
+                                                            $event.preventDefault()
+                                                            return _vm.submitPer(
+                                                              $event
+                                                            )
+                                                          }
                                                         }
-                                                      })
-                                                    ],
-                                                    1
-                                                  )
+                                                      },
+                                                      [
+                                                        _c("v-text-field", {
+                                                          attrs: {
+                                                            rules: _vm.rulesPer,
+                                                            counter: "25",
+                                                            label:
+                                                              "عنوان دسترسی را وارد کنید",
+                                                            hint:
+                                                              "فقط نام انگلیسی وارد کنید"
+                                                          },
+                                                          model: {
+                                                            value: _vm.titlePer,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.titlePer = $$v
+                                                            },
+                                                            expression:
+                                                              "titlePer"
+                                                          }
+                                                        })
+                                                      ],
+                                                      1
+                                                    )
+                                                  ])
                                                 ],
                                                 1
                                               )
@@ -60832,64 +60995,219 @@ var render = function() {
                                           _vm._v(" "),
                                           _c(
                                             "tbody",
-                                            _vm._l(_vm.per, function(item) {
-                                              return _c(
-                                                "tr",
-                                                { key: item.name },
-                                                [
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass: "text-right"
-                                                    },
-                                                    [_vm._v(_vm._s(item.name))]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "td",
-                                                    {
-                                                      staticClass: "text-left"
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "v-btn",
-                                                        {
-                                                          attrs: {
-                                                            text: "",
-                                                            icon: "",
-                                                            color: "primary"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("v-icon", [
-                                                            _vm._v("mdi-pencil")
-                                                          ])
-                                                        ],
-                                                        1
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "v-btn",
-                                                        {
-                                                          attrs: {
-                                                            text: "",
-                                                            icon: "",
-                                                            color: "secondary"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("v-icon", [
-                                                            _vm._v("mdi-delete")
-                                                          ])
-                                                        ],
-                                                        1
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                ]
-                                              )
-                                            }),
+                                            _vm._l(
+                                              _vm.all.permissions,
+                                              function(item) {
+                                                return _c(
+                                                  "tr",
+                                                  { key: item.name },
+                                                  [
+                                                    _c(
+                                                      "td",
+                                                      {
+                                                        staticClass:
+                                                          "text-right"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(item.name)
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "td",
+                                                      {
+                                                        staticClass: "text-left"
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "v-dialog",
+                                                          {
+                                                            attrs: {
+                                                              persistent: "",
+                                                              "max-width": "290"
+                                                            },
+                                                            scopedSlots: _vm._u(
+                                                              [
+                                                                {
+                                                                  key:
+                                                                    "activator",
+                                                                  fn: function(
+                                                                    ref
+                                                                  ) {
+                                                                    var on =
+                                                                      ref.on
+                                                                    return [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        _vm._g(
+                                                                          {
+                                                                            attrs: {
+                                                                              text:
+                                                                                "",
+                                                                              icon:
+                                                                                "",
+                                                                              color:
+                                                                                "secondary"
+                                                                            }
+                                                                          },
+                                                                          on
+                                                                        ),
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-delete"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      )
+                                                                    ]
+                                                                  }
+                                                                }
+                                                              ],
+                                                              null,
+                                                              true
+                                                            ),
+                                                            model: {
+                                                              value:
+                                                                _vm.dialogPermission,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.dialogPermission = $$v
+                                                              },
+                                                              expression:
+                                                                "dialogPermission"
+                                                            }
+                                                          },
+                                                          [
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-card",
+                                                              [
+                                                                _c(
+                                                                  "v-card-title",
+                                                                  {
+                                                                    staticClass:
+                                                                      "headline"
+                                                                  },
+                                                                  [
+                                                                    _vm._v(
+                                                                      "حذف دسترسی"
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "v-card-text",
+                                                                  [
+                                                                    _vm._v(
+                                                                      "آیا از حذف " +
+                                                                        _vm._s(
+                                                                          item.name
+                                                                        ) +
+                                                                        " اطمینان دارید؟"
+                                                                    )
+                                                                  ]
+                                                                ),
+                                                                _vm._v(" "),
+                                                                _c(
+                                                                  "v-card-actions",
+                                                                  [
+                                                                    _c(
+                                                                      "v-spacer"
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "v-btn",
+                                                                      {
+                                                                        attrs: {
+                                                                          icon:
+                                                                            "",
+                                                                          color:
+                                                                            "green darken-1",
+                                                                          text:
+                                                                            ""
+                                                                        },
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {
+                                                                            _vm.dialogPermission = false
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _vm._v(
+                                                                          "خیر"
+                                                                        )
+                                                                      ]
+                                                                    ),
+                                                                    _vm._v(" "),
+                                                                    _c(
+                                                                      "v-btn",
+                                                                      {
+                                                                        attrs: {
+                                                                          icon:
+                                                                            "",
+                                                                          color:
+                                                                            "green darken-1",
+                                                                          text:
+                                                                            ""
+                                                                        },
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {
+                                                                            ;(_vm.dialogPermission = false),
+                                                                              _vm.delPer(
+                                                                                item.id,
+                                                                                item.name
+                                                                              )
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-icon",
+                                                                          {
+                                                                            attrs: {
+                                                                              color:
+                                                                                "red",
+                                                                              dark:
+                                                                                ""
+                                                                            }
+                                                                          },
+                                                                          [
+                                                                            _vm._v(
+                                                                              "mdi-delete"
+                                                                            )
+                                                                          ]
+                                                                        )
+                                                                      ],
+                                                                      1
+                                                                    )
+                                                                  ],
+                                                                  1
+                                                                )
+                                                              ],
+                                                              1
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              }
+                                            ),
                                             0
                                           )
                                         ]
@@ -60899,7 +61217,7 @@ var render = function() {
                                   ],
                                   null,
                                   false,
-                                  2871897340
+                                  2214863014
                                 )
                               })
                             ],
