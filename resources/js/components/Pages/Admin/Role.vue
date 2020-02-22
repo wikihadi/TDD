@@ -241,28 +241,28 @@
                                                 <!--<v-icon>mdi-pencil</v-icon>-->
                                             <!--</v-btn>-->
 
-                                            <v-dialog v-model="dialogPermission" persistent max-width="290">
-                                                <template v-slot:activator="{ on }">
-                                                    <v-btn text icon color="secondary" v-on="on">
-                                                        <v-icon>mdi-delete</v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <v-card>
-                                                    <v-card-title class="headline">حذف دسترسی</v-card-title>
-                                                    <v-card-text>آیا از حذف {{item.name}} اطمینان دارید؟</v-card-text>
-                                                    <v-card-actions>
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn icon color="green darken-1" text @click="dialogPermission = false">خیر</v-btn>
-                                                        <v-btn icon color="green darken-1" text @click="dialogPermission = false,delPer(item.id,item.name)"><v-icon color="red" dark>mdi-delete</v-icon></v-btn>
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </v-dialog>
+                                            <!--<v-dialog v-model="dialogPermission" persistent max-width="290">-->
+                                                <!--<template v-slot:activator="{ on }">-->
+                                                    <!--<v-btn text icon color="secondary" v-on="on">-->
+                                                        <!--<v-icon>mdi-delete</v-icon>-->
+                                                    <!--</v-btn>-->
+                                                <!--</template>-->
+                                                <!--<v-card>-->
+                                                    <!--<v-card-title class="headline">حذف دسترسی</v-card-title>-->
+                                                    <!--<v-card-text>آیا از حذف {{item.name}} اطمینان دارید؟</v-card-text>-->
+                                                    <!--<v-card-actions>-->
+                                                        <!--<v-spacer></v-spacer>-->
+                                                        <!--<v-btn icon color="green darken-1" text @click="dialogPermission = false">خیر</v-btn>-->
+                                                        <!--<v-btn icon color="green darken-1" text @click="dialogPermission = false,delPer(item.id,item.name)"><v-icon color="red" dark>mdi-delete</v-icon></v-btn>-->
+                                                    <!--</v-card-actions>-->
+                                                <!--</v-card>-->
+                                            <!--</v-dialog>-->
 
 
 
-                                            <!--<v-btn text icon color="secondary" @click="delPer(item.id,item.name)">-->
-                                                <!--<v-icon>mdi-delete</v-icon>-->
-                                            <!--</v-btn>-->
+                                            <v-btn text icon color="secondary" @click="delPer(item.id,item.name)">
+                                                <v-icon>mdi-delete</v-icon>
+                                            </v-btn>
                                         </td>
                                     </tr>
                                     </tbody>

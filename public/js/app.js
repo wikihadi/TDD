@@ -61022,182 +61022,30 @@ var render = function() {
                                                       },
                                                       [
                                                         _c(
-                                                          "v-dialog",
+                                                          "v-btn",
                                                           {
                                                             attrs: {
-                                                              persistent: "",
-                                                              "max-width": "290"
+                                                              text: "",
+                                                              icon: "",
+                                                              color: "secondary"
                                                             },
-                                                            scopedSlots: _vm._u(
-                                                              [
-                                                                {
-                                                                  key:
-                                                                    "activator",
-                                                                  fn: function(
-                                                                    ref
-                                                                  ) {
-                                                                    var on =
-                                                                      ref.on
-                                                                    return [
-                                                                      _c(
-                                                                        "v-btn",
-                                                                        _vm._g(
-                                                                          {
-                                                                            attrs: {
-                                                                              text:
-                                                                                "",
-                                                                              icon:
-                                                                                "",
-                                                                              color:
-                                                                                "secondary"
-                                                                            }
-                                                                          },
-                                                                          on
-                                                                        ),
-                                                                        [
-                                                                          _c(
-                                                                            "v-icon",
-                                                                            [
-                                                                              _vm._v(
-                                                                                "mdi-delete"
-                                                                              )
-                                                                            ]
-                                                                          )
-                                                                        ],
-                                                                        1
-                                                                      )
-                                                                    ]
-                                                                  }
-                                                                }
-                                                              ],
-                                                              null,
-                                                              true
-                                                            ),
-                                                            model: {
-                                                              value:
-                                                                _vm.dialogPermission,
-                                                              callback: function(
-                                                                $$v
+                                                            on: {
+                                                              click: function(
+                                                                $event
                                                               ) {
-                                                                _vm.dialogPermission = $$v
-                                                              },
-                                                              expression:
-                                                                "dialogPermission"
+                                                                return _vm.delPer(
+                                                                  item.id,
+                                                                  item.name
+                                                                )
+                                                              }
                                                             }
                                                           },
                                                           [
-                                                            _vm._v(" "),
-                                                            _c(
-                                                              "v-card",
-                                                              [
-                                                                _c(
-                                                                  "v-card-title",
-                                                                  {
-                                                                    staticClass:
-                                                                      "headline"
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "حذف دسترسی"
-                                                                    )
-                                                                  ]
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-card-text",
-                                                                  [
-                                                                    _vm._v(
-                                                                      "آیا از حذف " +
-                                                                        _vm._s(
-                                                                          item.name
-                                                                        ) +
-                                                                        " اطمینان دارید؟"
-                                                                    )
-                                                                  ]
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-card-actions",
-                                                                  [
-                                                                    _c(
-                                                                      "v-spacer"
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "v-btn",
-                                                                      {
-                                                                        attrs: {
-                                                                          icon:
-                                                                            "",
-                                                                          color:
-                                                                            "green darken-1",
-                                                                          text:
-                                                                            ""
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            _vm.dialogPermission = false
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "خیر"
-                                                                        )
-                                                                      ]
-                                                                    ),
-                                                                    _vm._v(" "),
-                                                                    _c(
-                                                                      "v-btn",
-                                                                      {
-                                                                        attrs: {
-                                                                          icon:
-                                                                            "",
-                                                                          color:
-                                                                            "green darken-1",
-                                                                          text:
-                                                                            ""
-                                                                        },
-                                                                        on: {
-                                                                          click: function(
-                                                                            $event
-                                                                          ) {
-                                                                            ;(_vm.dialogPermission = false),
-                                                                              _vm.delPer(
-                                                                                item.id,
-                                                                                item.name
-                                                                              )
-                                                                          }
-                                                                        }
-                                                                      },
-                                                                      [
-                                                                        _c(
-                                                                          "v-icon",
-                                                                          {
-                                                                            attrs: {
-                                                                              color:
-                                                                                "red",
-                                                                              dark:
-                                                                                ""
-                                                                            }
-                                                                          },
-                                                                          [
-                                                                            _vm._v(
-                                                                              "mdi-delete"
-                                                                            )
-                                                                          ]
-                                                                        )
-                                                                      ],
-                                                                      1
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ],
-                                                              1
-                                                            )
+                                                            _c("v-icon", [
+                                                              _vm._v(
+                                                                "mdi-delete"
+                                                              )
+                                                            ])
                                                           ],
                                                           1
                                                         )
@@ -61217,7 +61065,7 @@ var render = function() {
                                   ],
                                   null,
                                   false,
-                                  2214863014
+                                  64532310
                                 )
                               })
                             ],
