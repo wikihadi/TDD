@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('card')->nullable();
             $table->string('bank')->nullable();
             $table->string('account_code')->nullable();
-            $table->string('account_code')->nullable();
             $table->string('role')->nullable();
             $table->string('etiquette')->nullable();
             $table->text('comment')->nullable();

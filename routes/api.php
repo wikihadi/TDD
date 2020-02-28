@@ -30,9 +30,14 @@ Route::get('notification/read','NotificationController@read');
 Route::get('notification/markAllAsRead','NotificationController@markAllAsRead');
 
 
-//Admin
+//Admin User
 Route::get('admin/users/get','UserController@usersGet');
-Route::get('admin/users/rolePer/get','UserController@usersRolePerGet');
-Route::post('admin/users/rolePer/addPer','UserController@addPer');
-Route::post('admin/users/rolePer/delPer','UserController@delPer');
 Route::post('admin/users/del','UserController@destroy');
+
+
+//Role
+Route::get('admin/users/rolePer/get','RoleController@usersRolePerGet');
+Route::post('admin/users/rolePer/addPer','RoleController@addPer');
+Route::post('admin/users/rolePer/addRole','RoleController@addRole');
+Route::post('admin/users/rolePer/delPer','RoleController@delPer');
+Route::post('admin/users/rolePer/delRole','RoleController@delRole');

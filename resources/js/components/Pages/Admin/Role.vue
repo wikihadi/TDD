@@ -75,6 +75,7 @@
                                         </v-btn>
                                     </template>
                                     <v-card>
+                                        <form @submit.prevent="submitRole">
                                         <v-toolbar dark color="indigo">
                                             <v-btn icon dark @click="addRole = false">
                                                 <v-icon>mdi-close</v-icon>
@@ -82,7 +83,7 @@
                                             <v-toolbar-title>افزودن نقش کاربری</v-toolbar-title>
                                             <v-spacer></v-spacer>
                                             <v-toolbar-items>
-                                                <v-btn dark text @click="addRole = false">ذخیره</v-btn>
+                                                <v-btn dark text @click="submitRole">ذخیره</v-btn>
                                             </v-toolbar-items>
                                         </v-toolbar>
                                         <v-list three-line subheader class="text-right">
@@ -90,7 +91,7 @@
                                             <v-list-item>
                                                 <v-list-item-content>
                                                     <v-text-field
-                                                        v-model="title"
+                                                        v-model="titleRole"
                                                         :rules="rules"
                                                         counter="15"
                                                         label="عنوان نقش را وارد کنید"
@@ -103,43 +104,17 @@
                                         <v-divider></v-divider>
                                         <v-list subheader>
                                             <v-subheader>دسترسی ها</v-subheader>
-                                            <v-list-item @click="notifications=!notifications">
+                                            <v-list-item v-for="item in all.permissions" :key="item.id">
                                                 <v-list-item-content class="text-right">
-                                                    <v-list-item-title>ایجاد پروژه</v-list-item-title>
+                                                    <v-list-item-title v-text="item.name"></v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-spacer></v-spacer>
                                                 <v-list-item-action>
-                                                    <v-checkbox v-model="notifications"></v-checkbox>
-                                                </v-list-item-action>
-                                            </v-list-item>
-                                            <v-list-item @click="notifications=!notifications">
-                                                <v-list-item-content class="text-right">
-                                                    <v-list-item-title>ایجاد پروژه</v-list-item-title>
-                                                </v-list-item-content>
-                                                <v-spacer></v-spacer>
-                                                <v-list-item-action>
-                                                    <v-checkbox v-model="notifications"></v-checkbox>
-                                                </v-list-item-action>
-                                            </v-list-item>
-                                            <v-list-item @click="notifications=!notifications">
-                                                <v-list-item-content class="text-right">
-                                                    <v-list-item-title>ایجاد پروژه</v-list-item-title>
-                                                </v-list-item-content>
-                                                <v-spacer></v-spacer>
-                                                <v-list-item-action>
-                                                    <v-checkbox v-model="notifications"></v-checkbox>
-                                                </v-list-item-action>
-                                            </v-list-item>
-                                            <v-list-item @click="notifications=!notifications">
-                                                <v-list-item-content class="text-right">
-                                                    <v-list-item-title>ایجاد پروژه</v-list-item-title>
-                                                </v-list-item-content>
-                                                <v-spacer></v-spacer>
-                                                <v-list-item-action>
-                                                    <v-checkbox v-model="notifications"></v-checkbox>
+                                                    <v-checkbox v-model="checkedPermission" :value="item.name"></v-checkbox>
                                                 </v-list-item-action>
                                             </v-list-item>
                                         </v-list>
+                                        </form>
                                     </v-card>
                                 </v-dialog>
                                 نقش های کاربری
@@ -162,12 +137,31 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="item in all.roles" :key="item.name">
-                                        <td class="text-right">{{ item.name }}</td>
+                                        <td class="text-right">
+                                            {{ item.name }} |
+                                            <v-chip
+                                                    class="ma-2"
+                                                    color="primary"
+                                                    small
+                                                    v-for="i in item.permissions"
+                                                    :key="i.id"
+                                                    v-text="i.name"
+                                                    v-if="item.permissions.length>0"
+                                            >
+                                            </v-chip>
+                                            <v-chip
+                                                    class="ma-2"
+                                                    small
+                                                    v-else
+                                            >
+                                                No Permission
+                                            </v-chip>
+                                        </td>
                                         <td class="text-left">
-                                            <v-btn text icon color="primary">
-                                                <v-icon>mdi-pencil</v-icon>
-                                            </v-btn>
-                                            <v-btn text icon color="secondary">
+                                            <!--<v-btn text icon color="primary">-->
+                                                <!--<v-icon>mdi-pencil</v-icon>-->
+                                            <!--</v-btn>-->
+                                            <v-btn text icon color="secondary"  @click="delRole(item.id,item.name)">
                                                 <v-icon>mdi-delete</v-icon>
                                             </v-btn>
                                         </td>
@@ -187,6 +181,7 @@
                                         </v-btn>
                                     </template>
                                     <v-card>
+                                        <form @submit.prevent="submitPer">
                                         <v-toolbar dark color="indigo">
                                             <v-btn icon dark @click="addPer = false">
                                                 <v-icon>mdi-close</v-icon>
@@ -194,14 +189,13 @@
                                             <v-toolbar-title>افزودن دسترسی</v-toolbar-title>
                                             <v-spacer></v-spacer>
                                             <v-toolbar-items>
-                                                <v-btn dark text @click="addPer = false">ذخیره</v-btn>
+                                                <v-btn dark text @click="submitPer">ذخیره</v-btn>
                                             </v-toolbar-items>
                                         </v-toolbar>
                                         <v-list three-line subheader class="text-right">
                                             <!--<v-subheader>فرم دسترسی</v-subheader>-->
                                             <v-list-item>
                                                 <v-list-item-content>
-                                                    <form @submit.prevent="submitPer">
                                                         <v-text-field
                                                             v-model="titlePer"
                                                             :rules="rulesPer"
@@ -209,10 +203,10 @@
                                                             label="عنوان دسترسی را وارد کنید"
                                                             hint="فقط نام انگلیسی وارد کنید"
                                                         ></v-text-field>
-                                                    </form>
                                                 </v-list-item-content>
                                             </v-list-item>
                                         </v-list>
+                                        </form>
                                     </v-card>
                                 </v-dialog>
                                 دسترسی های کاربری
@@ -295,6 +289,7 @@
             addPer: false,
             title: '',
             titlePer: '',
+            titleRole: '',
             notifications: false,
             rules: [v => v.length <= 15 || 'سقف تعداد کاراکتر پر شد'],
             rulesPer: [v => v.length <= 25 || 'سقف تعداد کاراکتر پر شد'],
@@ -305,7 +300,8 @@
             timeout: 2000,
             snackbarBg:'',
             snackbarBtn:'blue',
-            dialogPermission:false
+            dialogPermission:false,
+            checkedPermission: []
 
         }),
         mounted() {
@@ -349,7 +345,30 @@
                     .then(
                             this.read(0),
                             this.addPer=false,
+                            this.titlePer='',
                             this.snackbarOn('دسترسی با موفقیت افزوده شد','dark','green',2000)
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+            },
+            submitRole(){
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                };
+
+                let formData = new FormData();
+                formData.append('permissions', this.checkedPermission);
+                formData.append('name', this.titleRole);
+                formData.append('_token', this.csrf);
+                formData.append('user_id', this.user_id);
+                formData.append('user_name', this.user_name);
+                axios.post('/api/admin/users/rolePer/addRole', formData, config)
+                    .then(
+                            this.read(0),
+                            this.addRole=false,
+                            this.titleRole='',
+                            this.snackbarOn('نقش با موفقیت افزوده شد','dark','green',2000)
                     )
                     .catch(function (error) {
                         console.log(error)
@@ -368,6 +387,24 @@
                     .then(
                         this.read(0),
                         this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد','red','white',2000)
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+                },
+            delRole(id,name) {
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                };
+                let formData = new FormData();
+                formData.append('del_id', id);
+                formData.append('_token', this.csrf);
+                formData.append('user_id', this.user_id);
+                formData.append('user_name', this.user_name);
+                axios.post('/api/admin/users/rolePer/delRole', formData, config)
+                    .then(
+                        this.read(0),
+                        this.snackbarOn('نقش "' + name + '" با موفقیت حذف شد','red','white',2000)
                     )
                     .catch(function (error) {
                         console.log(error)
