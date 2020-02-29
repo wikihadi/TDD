@@ -39,5 +39,6 @@ Route::post('admin/users/del','UserController@destroy');
 Route::get('admin/users/rolePer/get','RoleController@usersRolePerGet');
 Route::post('admin/users/rolePer/addPer','RoleController@addPer');
 Route::post('admin/users/rolePer/addRole','RoleController@addRole');
+Route::post('admin/users/rolePer/updateRole','RoleController@updateRole');
 Route::post('admin/users/rolePer/delPer','RoleController@delPer');
 Route::post('admin/users/rolePer/delRole','RoleController@delRole');

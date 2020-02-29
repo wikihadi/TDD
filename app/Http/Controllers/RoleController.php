@@ -49,12 +49,34 @@ class RoleController extends Controller
     public function addRole(Request $request){
 
 
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permissions'));
+        $role = Role::create(['name' => $request['name']]);
+
+        $permissions = explode(",",$request['permissions']);
+            $role->syncPermissions($permissions);
 
         $activity = new Activity([
             'code'    => 8021,
             'note'   => 'افزودن نقش',
+            'user_id'   => $request['user_id'],
+            'user_name'   => $request['user_name'],
+        ]);
+        $activity->save();
+        return $this->usersRolePerGet();
+    }
+//    update Role
+    public function updateRole(Request $request){
+
+
+        $role = Role::findById($request['id']);
+        if ($role['name']!==$request['name']){
+            $role['name']=$request['name'];
+            $role->save();
+        }
+        $permissions = explode(",",$request['permissions']);
+        $role->syncPermissions($permissions);
+        $activity = new Activity([
+            'code'    => 8022,
+            'note'   => 'ویرایش نقش',
             'user_id'   => $request['user_id'],
             'user_name'   => $request['user_name'],
         ]);

@@ -1,4 +1,5 @@
 <template>
+    <v-app>
     <v-container
         fluid
     >
@@ -17,9 +18,6 @@
                 بستن
             </v-btn>
         </v-snackbar>
-
-
-
 
         <v-item-group>
             <v-container>
@@ -65,9 +63,15 @@
 
                 </v-subheader>
                 <v-row>
+
+
+
+
                     <v-col v-if="!showPermissions">
                         <v-card>
                             <v-card-title>
+
+
                                 <v-dialog v-model="addRole" fullscreen hide-overlay transition="dialog-bottom-transition">
                                     <template v-slot:activator="{ on }">
                                         <v-btn text icon color="green" v-on="on">
@@ -110,22 +114,64 @@
                                                 </v-list-item-content>
                                                 <v-spacer></v-spacer>
                                                 <v-list-item-action>
-                                                    <v-checkbox v-model="checkedPermission" :value="item.name"></v-checkbox>
+                                                    <v-checkbox v-model="checkedPermission" :value="item.id"></v-checkbox>
                                                 </v-list-item-action>
                                             </v-list-item>
                                         </v-list>
                                         </form>
                                     </v-card>
                                 </v-dialog>
+
+
+
+                                <v-dialog v-model="updateRole" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                    <v-card>
+                                        <form @submit.prevent="uRole(idURole)">
+                                        <v-toolbar dark color="amber">
+                                            <v-btn icon dark @click="updateRole = false">
+                                                <v-icon>mdi-close</v-icon>
+                                            </v-btn>
+                                            <v-toolbar-title>ویرایش نقش کاربری</v-toolbar-title>
+                                            <v-spacer></v-spacer>
+                                            <v-toolbar-items>
+                                                <v-btn dark text @click="uRole(idURole)">ویرایش</v-btn>
+                                            </v-toolbar-items>
+                                        </v-toolbar>
+                                        <v-list three-line subheader class="text-right">
+                                            <v-subheader>فرم نقش کاربری</v-subheader>
+                                            <v-list-item>
+                                                <v-list-item-content>
+                                                    <v-text-field
+                                                        v-model="titleURole"
+                                                        :rules="rules"
+                                                        counter="15"
+                                                        label="عنوان نقش را وارد کنید"
+                                                        hint="فقط نام انگلیسی وارد کنید"
+                                                        outlined
+                                                    ></v-text-field>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                        <v-list subheader>
+                                            <v-subheader>دسترسی ها</v-subheader>
+                                            <v-list-item v-for="item in all.permissions" :key="item.id">
+                                                <v-list-item-content class="text-right">
+                                                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                                                </v-list-item-content>
+                                                <v-spacer></v-spacer>
+                                                <v-list-item-action>
+                                                    <v-checkbox v-model="checkedPermission" :value="item.id"></v-checkbox>
+                                                </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list>
+                                        </form>
+                                    </v-card>
+                                </v-dialog>
+
+
+
                                 نقش های کاربری
-                                <!--<v-spacer></v-spacer>-->
-                                <!--<v-text-field-->
-                                    <!--v-model="search"-->
-                                    <!--append-icon="mdi-magnify"-->
-                                    <!--label="جستجو"-->
-                                    <!--single-line-->
-                                    <!--hide-details-->
-                                <!--&gt;</v-text-field>-->
                             </v-card-title>
                             <v-simple-table>
                                 <template v-slot:default>
@@ -138,32 +184,47 @@
                                     <tbody>
                                     <tr v-for="item in all.roles" :key="item.name">
                                         <td class="text-right">
-                                            {{ item.name }} |
                                             <v-chip
+                                                    class="ma-3"
+                                                    v-text="item.name"
+                                                >
+                                            </v-chip>
+                                            <span
                                                     class="ma-2"
-                                                    color="primary"
-                                                    small
                                                     v-for="i in item.permissions"
                                                     :key="i.id"
                                                     v-text="i.name"
                                                     v-if="item.permissions.length>0"
                                             >
-                                            </v-chip>
-                                            <v-chip
-                                                    class="ma-2"
-                                                    small
-                                                    v-else
+                                            </span>
+                                            <span
+                                                    class="ma-2" v-else
                                             >
                                                 No Permission
-                                            </v-chip>
+                                            </span>
                                         </td>
                                         <td class="text-left">
-                                            <!--<v-btn text icon color="primary">-->
-                                                <!--<v-icon>mdi-pencil</v-icon>-->
-                                            <!--</v-btn>-->
-                                            <v-btn text icon color="secondary"  @click="delRole(item.id,item.name)">
-                                                <v-icon>mdi-delete</v-icon>
+                                            <v-btn text icon color="primary" @click="updateRoleOn(item.id,item.name,item.permissions)">
+                                                <v-icon>mdi-pencil</v-icon>
                                             </v-btn>
+
+                                            <v-dialog v-model="dialogRoleDel" persistent max-width="290">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-btn text icon color="secondary" v-on="on">
+                                                    <v-icon>mdi-delete</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <v-card>
+                                                    <v-card-title class="headline">حذف نقش</v-card-title>
+                                                    <v-card-text>آیا از حذف {{item.name}} اطمینان دارید؟</v-card-text>
+                                                    <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn icon color="green darken-1" text @click="dialogRoleDel = false">خیر</v-btn>
+                                                    <v-btn icon color="green darken-1" text @click="dialogRoleDel = false,delRole(item.id,item.name)"><v-icon color="red" dark>mdi-delete</v-icon></v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+
                                         </td>
                                     </tr>
                                     </tbody>
@@ -171,6 +232,10 @@
                             </v-simple-table>
                         </v-card>
                     </v-col>
+
+
+
+
                     <v-col v-if="showPermissions">
                         <v-card>
                             <v-card-title>
@@ -272,7 +337,7 @@
 
 
 
-
+    </v-app>
 
 
 </template>
@@ -287,6 +352,7 @@
             showPermissions: false,
             addRole: false,
             addPer: false,
+            updateRole: false,
             title: '',
             titlePer: '',
             titleRole: '',
@@ -301,7 +367,11 @@
             snackbarBg:'',
             snackbarBtn:'blue',
             dialogPermission:false,
-            checkedPermission: []
+            dialogRoleDel:false,
+            checkedPermission: [],
+            titleURole:'',
+            idURole:'',
+
 
         }),
         mounted() {
@@ -309,6 +379,42 @@
 
         },
         methods:{
+            updateRoleOn(id,name,checked){
+                this.updateRole=true;
+                this.titleURole=name;
+                this.idURole=id;
+
+                let v = [];
+                for (let i=0;i<checked.length;i++){
+                    v.push(checked[i].id)
+                }
+                this.checkedPermission=v;
+
+            },
+            uRole(id){
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                };
+
+                let formData = new FormData();
+                formData.append('id', id);
+                formData.append('permissions', this.checkedPermission);
+                formData.append('name', this.titleURole);
+                formData.append('_token', this.csrf);
+                formData.append('user_id', this.user_id);
+                formData.append('user_name', this.user_name);
+                axios.post('/api/admin/users/rolePer/updateRole', formData, config)
+                    .then(
+                        this.read(0),
+                        this.updateRole=false,
+                        this.titleURole='',
+                        this.snackbarOn('نقش با موفقیت ویرایش شد','dark','green',2000)
+                    )
+                    .catch(function (error) {
+                        this.snackbarOn('ظاهرا مشکلی در ویرایش نقش بوجود آمده کد 48022','dark','green',2000),
+                        console.log(error)
+                    });
+            },
             snackbarOn(t,bg,btn,timeout){
                 this.snackbarText=t;
                 this.snackbarBg=bg;
