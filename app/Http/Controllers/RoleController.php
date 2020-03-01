@@ -66,7 +66,6 @@ class RoleController extends Controller
 //    update Role
     public function updateRole(Request $request){
 
-
         $role = Role::findById($request['id']);
         if ($role['name']!==$request['name']){
             $role['name']=$request['name'];

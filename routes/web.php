@@ -38,19 +38,22 @@ use Spatie\Permission\Models\Role;
     //});
     //Route::get('/{any}', 'DashboardController@index')->where('any' , 'dashboard');
     //Route::get('/dashboard/{any}', 'DashboardController@index')->where('any' , '.*');
-    Route::get('/dashboard/{vue_capture?}', function () {
-        $activity = new Activity([
-            'note'   => 'ورود',
-            'user_id'   => Auth::id(),
-            'url'   => 'dashboard',
-        ]);
-        $activity->save();
-    //    Notification::send($user, new newUserRegistered($activity));
-        $user = Auth::user();
-        $unreadnotifications=$user->unReadNotifications();
-        $readnotifications=$user->readNotifications();
+    Route::get('/dashboard/{vue_capture?}', 'DashboardController@index')->where('vue_capture', '[\/\w\.-]*');
+    Route::get('activity/read','ActivityController@read');
 
-        return view('dashboard',compact('user','unreadnotifications','readnotifications'));
-    })->where('vue_capture', '[\/\w\.-]*');
+//    Route::get('/dashboard/{vue_capture?}', function () {
+//        $activity = new Activity([
+//            'note'   => 'ورود',
+//            'user_id'   => Auth::id(),
+//            'url'   => 'dashboard',
+//        ]);
+//        $activity->save();
+//    //    Notification::send($user, new newUserRegistered($activity));
+//        $user = Auth::user();
+//        $unreadnotifications=$user->unReadNotifications();
+//        $readnotifications=$user->readNotifications();
+//
+//        return view('dashboard',compact('user','unreadnotifications','readnotifications'));
+//    })->where('vue_capture', '[\/\w\.-]*');
 
 //});

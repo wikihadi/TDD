@@ -10,6 +10,17 @@ use PhpParser\Node\Stmt\Return_;
 class ActivityController extends Controller
 {
 
+
+
+    function __construct()
+    {
+        $this->middleware('auth');
+
+//        $this->middleware('permission:role-list');
+//        $this->middleware('permission:role-create', ['only' => ['create','store']]);
+//        $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
+//        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +34,7 @@ class ActivityController extends Controller
     public function read()
     {
         $qty=$_GET['qty'];
-        $activities = Activity::where('code', '>' , 0)->where('user_id',$_GET['uId'])->with('user')->whereHas('user')->latest()->take($qty)->get();
+        $activities = Activity::where('code', '>' , 0)->where('user_id',Auth::id())->with('user')->whereHas('user')->latest()->take($qty)->get();
         foreach ($activities as $key => $loop) {
             $loop->jd = verta($loop->updated_at)->formatJalaliDatetime();
             $loop->diff = verta($loop->updated_at)->formatDifference();

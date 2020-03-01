@@ -3,12 +3,22 @@
     <v-list>
         <v-subheader>فعالیت ها
             <v-spacer></v-spacer>
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                    <v-switch v-model="switchX" v-on="on" @change="intervalSwap"></v-switch>
-                </template>
-                <span>بروزرسانی خودکار</span>
-            </v-tooltip>
+            <v-btn
+                    class="mx-2"
+                    flat
+                    icon
+                    fab
+                    x-small
+                    @click="read"
+            >
+                <v-icon dark>mdi-refresh</v-icon>
+            </v-btn>
+            <!--<v-tooltip bottom>-->
+                <!--<template v-slot:activator="{ on }">-->
+                    <!--<v-switch v-model="switchX" v-on="on" @change="intervalSwap"></v-switch>-->
+                <!--</template>-->
+                <!--<span>بروزرسانی خودکار</span>-->
+            <!--</v-tooltip>-->
         </v-subheader>
         <!--<v-chip-->
             <!--class="ma-2"-->
@@ -72,14 +82,15 @@
         data: () => ({
             switch1: true,
             switch2: false,
-            switchX:true,
+            switchX:false,
             loading: false,
             transition: 'scale-transition',
             items:[],
             timeToInterval:'',
         }),
         mounted() {
-              this.intervalSwap()
+            this.read();
+            this.intervalSwap()
         },
         methods:{
             intervalSwap(){
@@ -93,11 +104,12 @@
 
             },
             read(){
-                    let url = '/api/activity/read?uId=' + this.user.id + '&qty=' + this.qty;
+                    let url = '/activity/read?uId=' + this.user.id + '&qty=' + this.qty;
                     axios.get(url)
                         .then(response =>this.items = response.data)
                         .catch(function (error) {
-                            console.log(error)
+                            console.log(error);
+                            this.rows.items({note: 'Error', diff: 'error' , avatar: 'error'});
                         });
             }
         }

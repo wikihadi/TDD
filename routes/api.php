@@ -33,6 +33,7 @@ Route::get('notification/markAllAsRead','NotificationController@markAllAsRead');
 //Admin User
 Route::get('admin/users/get','UserController@usersGet');
 Route::post('admin/users/del','UserController@destroy');
+Route::post('admin/users/update','UserController@update');
 
 
 //Role

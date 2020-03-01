@@ -31,15 +31,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $activity = new Activity([
+                $activity = new Activity([
             'note'   => 'ورود',
             'user_id'   => Auth::id(),
             'url'   => 'dashboard',
         ]);
         $activity->save();
-//        $user = Auth::user();
-//        User::find(1)->notify(new newUserRegistered($activity));
-//        Notification::send($user, new newUserRegistered($activity));
-        return view('dashboard');
+    //    Notification::send($user, new newUserRegistered($activity));
+        $user = Auth::user();
+        $unreadnotifications=$user->unReadNotifications();
+        $readnotifications=$user->readNotifications();
+
+        return view('dashboard',compact('user','unreadnotifications','readnotifications'));
     }
 }

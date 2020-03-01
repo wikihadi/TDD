@@ -2976,6 +2976,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Role",
   data: function data() {
@@ -3005,6 +3018,8 @@ __webpack_require__.r(__webpack_exports__);
       snackbarBg: '',
       snackbarBtn: 'blue',
       dialogPermission: false,
+      dialogPermissionId: '',
+      dialogPermissionName: '',
       dialogRoleDel: false,
       checkedPermission: [],
       titleURole: '',
@@ -3015,6 +3030,11 @@ __webpack_require__.r(__webpack_exports__);
     this.read(1);
   },
   methods: {
+    dialogPermissionOpen: function dialogPermissionOpen(id, name) {
+      this.dialogPermission = true;
+      this.dialogPermissionId = id;
+      this.dialogPermissionName = name;
+    },
     updateRoleOn: function updateRoleOn(id, name, checked) {
       this.updateRole = true;
       this.titleURole = name;
@@ -3110,6 +3130,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/admin/users/rolePer/delPer', formData, config).then(this.read(0), this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
         console.log(error);
       });
+      this.dialogPermissionId = '';
+      this.dialogPermissionName = '';
     },
     delRole: function delRole(id, name) {
       var config = {
@@ -3239,6 +3261,283 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Users",
   data: function data() {
@@ -3248,14 +3547,55 @@ __webpack_require__.r(__webpack_exports__);
       dialog: false,
       users: [],
       delete_id: '',
+      delete_name: '',
       user_id: document.head.querySelector("meta[name=user_id]").content,
-      user_name: document.head.querySelector("meta[name=user_name]").content
+      user_name: document.head.querySelector("meta[name=user_name]").content,
+      snackbarText: '',
+      snackbar: false,
+      timeout: 2000,
+      snackbarBg: '',
+      snackbarBtn: 'blue',
+      changeAvatar: false,
+      editUser: false,
+      userEditDialog: [],
+      avatar: ''
     };
   },
   mounted: function mounted() {
     this.read();
   },
   methods: {
+    updateUser: function updateUser() {
+      var config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      };
+      var json_userEditDialog = JSON.stringify(this.userEditDialog);
+      var formData = new FormData();
+      formData.append('user', json_userEditDialog);
+      formData.append('avatar', this.avatar);
+      formData.append('_token', this.csrf);
+      formData.append('user_id', this.user_id);
+      formData.append('user_name', this.user_name);
+      axios.post('/api/admin/users/update', formData, config).then(this.read(0), this.editUser = false, this.userEditDialog = [], this.snackbarOn('کاربر با موفقیت ویرایش شد', 'dark', 'green', 2000))["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    snackbarOn: function snackbarOn(t, bg, btn, timeout) {
+      this.snackbarText = t;
+      this.snackbarBg = bg;
+      this.snackbarBtn = btn;
+      this.timeout = timeout;
+      this.snackbar = true;
+      this.timeout = 2000;
+    },
+    onCopySuccess: function onCopySuccess() {
+      this.snackbarOn('در حافظه کپی شد', 'green darken-2', 'light');
+    },
+    onCopyError: function onCopyError() {
+      this.snackbarOn('اوپس... کپی نشد', 'red darken-2', 'light');
+    },
     read: function read() {
       var _this = this;
 
@@ -3405,6 +3745,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ActivityReportList",
   props: ['user', 'qty'],
@@ -3412,7 +3762,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       switch1: true,
       switch2: false,
-      switchX: true,
+      switchX: false,
       loading: false,
       transition: 'scale-transition',
       items: [],
@@ -3420,6 +3770,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    this.read();
     this.intervalSwap();
   },
   methods: {
@@ -3437,11 +3788,16 @@ __webpack_require__.r(__webpack_exports__);
     read: function read() {
       var _this2 = this;
 
-      var url = '/api/activity/read?uId=' + this.user.id + '&qty=' + this.qty;
+      var url = '/activity/read?uId=' + this.user.id + '&qty=' + this.qty;
       axios.get(url).then(function (response) {
         return _this2.items = response.data;
       })["catch"](function (error) {
         console.log(error);
+        this.rows.items({
+          note: 'Error',
+          diff: 'error',
+          avatar: 'error'
+        });
       });
     }
   }
@@ -3591,7 +3947,7 @@ __webpack_require__.r(__webpack_exports__);
       // if (this.switchX){
       this.timeToInterval = setInterval(function () {
         _this.read();
-      }, 3000); // } else {
+      }, 10000); // } else {
       //     window.clearInterval(this.timeToInterval)
       // }
     },
@@ -8722,6 +9078,23 @@ __webpack_require__.r(__webpack_exports__);
 })));
 //# sourceMappingURL=bootstrap.js.map
 
+
+/***/ }),
+
+/***/ "./node_modules/clipboard/dist/clipboard.min.js":
+/*!******************************************************!*\
+  !*** ./node_modules/clipboard/dist/clipboard.min.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * clipboard.js v2.0.4
+ * https://zenorocha.github.io/clipboard.js
+ * 
+ * Licensed MIT © Zeno Rocha
+ */
+!function(t,e){ true?module.exports=e():undefined}(this,function(){return function(n){var o={};function r(t){if(o[t])return o[t].exports;var e=o[t]={i:t,l:!1,exports:{}};return n[t].call(e.exports,e,e.exports,r),e.l=!0,e.exports}return r.m=n,r.c=o,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)r.d(n,o,function(t){return e[t]}.bind(null,o));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=0)}([function(t,e,n){"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i=function(){function o(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(t,e,n){return e&&o(t.prototype,e),n&&o(t,n),t}}(),a=o(n(1)),c=o(n(3)),u=o(n(4));function o(t){return t&&t.__esModule?t:{default:t}}var l=function(t){function o(t,e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,o);var n=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}(this,(o.__proto__||Object.getPrototypeOf(o)).call(this));return n.resolveOptions(e),n.listenClick(t),n}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(o,c.default),i(o,[{key:"resolveOptions",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{};this.action="function"==typeof t.action?t.action:this.defaultAction,this.target="function"==typeof t.target?t.target:this.defaultTarget,this.text="function"==typeof t.text?t.text:this.defaultText,this.container="object"===r(t.container)?t.container:document.body}},{key:"listenClick",value:function(t){var e=this;this.listener=(0,u.default)(t,"click",function(t){return e.onClick(t)})}},{key:"onClick",value:function(t){var e=t.delegateTarget||t.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new a.default({action:this.action(e),target:this.target(e),text:this.text(e),container:this.container,trigger:e,emitter:this})}},{key:"defaultAction",value:function(t){return s("action",t)}},{key:"defaultTarget",value:function(t){var e=s("target",t);if(e)return document.querySelector(e)}},{key:"defaultText",value:function(t){return s("text",t)}},{key:"destroy",value:function(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)}}],[{key:"isSupported",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:["copy","cut"],e="string"==typeof t?[t]:t,n=!!document.queryCommandSupported;return e.forEach(function(t){n=n&&!!document.queryCommandSupported(t)}),n}}]),o}();function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}t.exports=l},function(t,e,n){"use strict";var o,r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i=function(){function o(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(t,e,n){return e&&o(t.prototype,e),n&&o(t,n),t}}(),a=n(2),c=(o=a)&&o.__esModule?o:{default:o};var u=function(){function e(t){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),this.resolveOptions(t),this.initSelection()}return i(e,[{key:"resolveOptions",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{};this.action=t.action,this.container=t.container,this.emitter=t.emitter,this.target=t.target,this.text=t.text,this.trigger=t.trigger,this.selectedText=""}},{key:"initSelection",value:function(){this.text?this.selectFake():this.target&&this.selectTarget()}},{key:"selectFake",value:function(){var t=this,e="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandlerCallback=function(){return t.removeFake()},this.fakeHandler=this.container.addEventListener("click",this.fakeHandlerCallback)||!0,this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="absolute",this.fakeElem.style[e?"right":"left"]="-9999px";var n=window.pageYOffset||document.documentElement.scrollTop;this.fakeElem.style.top=n+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,this.container.appendChild(this.fakeElem),this.selectedText=(0,c.default)(this.fakeElem),this.copyText()}},{key:"removeFake",value:function(){this.fakeHandler&&(this.container.removeEventListener("click",this.fakeHandlerCallback),this.fakeHandler=null,this.fakeHandlerCallback=null),this.fakeElem&&(this.container.removeChild(this.fakeElem),this.fakeElem=null)}},{key:"selectTarget",value:function(){this.selectedText=(0,c.default)(this.target),this.copyText()}},{key:"copyText",value:function(){var e=void 0;try{e=document.execCommand(this.action)}catch(t){e=!1}this.handleResult(e)}},{key:"handleResult",value:function(t){this.emitter.emit(t?"success":"error",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})}},{key:"clearSelection",value:function(){this.trigger&&this.trigger.focus(),window.getSelection().removeAllRanges()}},{key:"destroy",value:function(){this.removeFake()}},{key:"action",set:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:"copy";if(this._action=t,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function(){return this._action}},{key:"target",set:function(t){if(void 0!==t){if(!t||"object"!==(void 0===t?"undefined":r(t))||1!==t.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&t.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(t.hasAttribute("readonly")||t.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=t}},get:function(){return this._target}}]),e}();t.exports=u},function(t,e){t.exports=function(t){var e;if("SELECT"===t.nodeName)t.focus(),e=t.value;else if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName){var n=t.hasAttribute("readonly");n||t.setAttribute("readonly",""),t.select(),t.setSelectionRange(0,t.value.length),n||t.removeAttribute("readonly"),e=t.value}else{t.hasAttribute("contenteditable")&&t.focus();var o=window.getSelection(),r=document.createRange();r.selectNodeContents(t),o.removeAllRanges(),o.addRange(r),e=o.toString()}return e}},function(t,e){function n(){}n.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){var o=this;function r(){o.off(t,r),e.apply(n,arguments)}return r._=e,this.on(t,r,n)},emit:function(t){for(var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,r=n.length;o<r;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],r=[];if(o&&e)for(var i=0,a=o.length;i<a;i++)o[i].fn!==e&&o[i].fn._!==e&&r.push(o[i]);return r.length?n[t]=r:delete n[t],this}},t.exports=n},function(t,e,n){var d=n(5),h=n(6);t.exports=function(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!d.string(e))throw new TypeError("Second argument must be a String");if(!d.fn(n))throw new TypeError("Third argument must be a Function");if(d.node(t))return s=e,f=n,(l=t).addEventListener(s,f),{destroy:function(){l.removeEventListener(s,f)}};if(d.nodeList(t))return a=t,c=e,u=n,Array.prototype.forEach.call(a,function(t){t.addEventListener(c,u)}),{destroy:function(){Array.prototype.forEach.call(a,function(t){t.removeEventListener(c,u)})}};if(d.string(t))return o=t,r=e,i=n,h(document.body,o,r,i);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");var o,r,i,a,c,u,l,s,f}},function(t,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){return"[object Function]"===Object.prototype.toString.call(t)}},function(t,e,n){var a=n(7);function i(t,e,n,o,r){var i=function(e,n,t,o){return function(t){t.delegateTarget=a(t.target,n),t.delegateTarget&&o.call(e,t)}}.apply(this,arguments);return t.addEventListener(n,i,r),{destroy:function(){t.removeEventListener(n,i,r)}}}t.exports=function(t,e,n,o,r){return"function"==typeof t.addEventListener?i.apply(null,arguments):"function"==typeof n?i.bind(null,document).apply(null,arguments):("string"==typeof t&&(t=document.querySelectorAll(t)),Array.prototype.map.call(t,function(t){return i(t,e,n,o,r)}))}},function(t,e){if("undefined"!=typeof Element&&!Element.prototype.matches){var n=Element.prototype;n.matches=n.matchesSelector||n.mozMatchesSelector||n.msMatchesSelector||n.oMatchesSelector||n.webkitMatchesSelector}t.exports=function(t,e){for(;t&&9!==t.nodeType;){if("function"==typeof t.matches&&t.matches(e))return t;t=t.parentNode}}}])});
 
 /***/ }),
 
@@ -58973,6 +59346,100 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-clipboard2/vue-clipboard.js":
+/*!******************************************************!*\
+  !*** ./node_modules/vue-clipboard2/vue-clipboard.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Clipboard = __webpack_require__(/*! clipboard/dist/clipboard.min.js */ "./node_modules/clipboard/dist/clipboard.min.js") // FIXME: workaround for browserify
+
+var VueClipboardConfig = {
+  autoSetContainer: false,
+  appendToBody: true // This fixes IE, see #50
+}
+
+var VueClipboard = {
+  install: function (Vue) {
+    Vue.prototype.$clipboardConfig = VueClipboardConfig
+    Vue.prototype.$copyText = function (text, container) {
+      return new Promise(function (resolve, reject) {
+        var fakeElement = document.createElement('button')
+        var clipboard = new Clipboard(fakeElement, {
+          text: function () { return text },
+          action: function () { return 'copy' },
+          container: typeof container === 'object' ? container : document.body
+        })
+        clipboard.on('success', function (e) {
+          clipboard.destroy()
+          resolve(e)
+        })
+        clipboard.on('error', function (e) {
+          clipboard.destroy()
+          reject(e)
+        })
+        if (VueClipboardConfig.appendToBody) document.body.appendChild(fakeElement)
+        fakeElement.click()
+        if (VueClipboardConfig.appendToBody) document.body.removeChild(fakeElement)
+      })
+    }
+
+    Vue.directive('clipboard', {
+      bind: function (el, binding, vnode) {
+        if (binding.arg === 'success') {
+          el._vClipboard_success = binding.value
+        } else if (binding.arg === 'error') {
+          el._vClipboard_error = binding.value
+        } else {
+          var clipboard = new Clipboard(el, {
+            text: function () { return binding.value },
+            action: function () { return binding.arg === 'cut' ? 'cut' : 'copy' },
+            container: VueClipboardConfig.autoSetContainer ? el : undefined
+          })
+          clipboard.on('success', function (e) {
+            var callback = el._vClipboard_success
+            callback && callback(e)
+          })
+          clipboard.on('error', function (e) {
+            var callback = el._vClipboard_error
+            callback && callback(e)
+          })
+          el._vClipboard = clipboard
+        }
+      },
+      update: function (el, binding) {
+        if (binding.arg === 'success') {
+          el._vClipboard_success = binding.value
+        } else if (binding.arg === 'error') {
+          el._vClipboard_error = binding.value
+        } else {
+          el._vClipboard.text = function () { return binding.value }
+          el._vClipboard.action = function () { return binding.arg === 'cut' ? 'cut' : 'copy' }
+        }
+      },
+      unbind: function (el, binding) {
+        if (binding.arg === 'success') {
+          delete el._vClipboard_success
+        } else if (binding.arg === 'error') {
+          delete el._vClipboard_error
+        } else {
+          el._vClipboard.destroy()
+          delete el._vClipboard
+        }
+      }
+    })
+  },
+  config: VueClipboardConfig
+}
+
+if (true) {
+  module.exports = VueClipboard
+} else {}
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Dashboard.vue?vue&type=template&id=040e2ab9&":
 /*!************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Dashboard.vue?vue&type=template&id=040e2ab9& ***!
@@ -61495,70 +61962,195 @@ var render = function() {
                                               _vm._v(" "),
                                               _c(
                                                 "tbody",
-                                                _vm._l(
-                                                  _vm.all.permissions,
-                                                  function(item) {
-                                                    return _c(
-                                                      "tr",
-                                                      { key: item.name },
-                                                      [
-                                                        _c(
-                                                          "td",
-                                                          {
-                                                            staticClass:
-                                                              "text-right"
-                                                          },
-                                                          [
-                                                            _vm._v(
-                                                              _vm._s(item.name)
-                                                            )
-                                                          ]
-                                                        ),
-                                                        _vm._v(" "),
-                                                        _c(
-                                                          "td",
-                                                          {
-                                                            staticClass:
-                                                              "text-left"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "v-btn",
-                                                              {
-                                                                attrs: {
-                                                                  text: "",
-                                                                  icon: "",
-                                                                  color:
-                                                                    "secondary"
-                                                                },
-                                                                on: {
-                                                                  click: function(
-                                                                    $event
-                                                                  ) {
-                                                                    return _vm.delPer(
-                                                                      item.id,
-                                                                      item.name
-                                                                    )
+                                                [
+                                                  _vm._l(
+                                                    _vm.all.permissions,
+                                                    function(item) {
+                                                      return _c(
+                                                        "tr",
+                                                        { key: item.name },
+                                                        [
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              staticClass:
+                                                                "text-right"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  item.name
+                                                                )
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "td",
+                                                            {
+                                                              staticClass:
+                                                                "text-left"
+                                                            },
+                                                            [
+                                                              _c(
+                                                                "v-btn",
+                                                                {
+                                                                  attrs: {
+                                                                    text: "",
+                                                                    icon: "",
+                                                                    color:
+                                                                      "secondary"
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      return _vm.dialogPermissionOpen(
+                                                                        item.id,
+                                                                        item.name
+                                                                      )
+                                                                    }
                                                                   }
-                                                                }
-                                                              },
-                                                              [
-                                                                _c("v-icon", [
-                                                                  _vm._v(
-                                                                    "mdi-delete"
-                                                                  )
-                                                                ])
-                                                              ],
-                                                              1
+                                                                },
+                                                                [
+                                                                  _c("v-icon", [
+                                                                    _vm._v(
+                                                                      "mdi-delete"
+                                                                    )
+                                                                  ])
+                                                                ],
+                                                                1
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ]
+                                                      )
+                                                    }
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-dialog",
+                                                    {
+                                                      attrs: {
+                                                        persistent: "",
+                                                        "max-width": "290"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.dialogPermission,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.dialogPermission = $$v
+                                                        },
+                                                        expression:
+                                                          "dialogPermission"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c(
+                                                        "v-card",
+                                                        [
+                                                          _c(
+                                                            "v-card-title",
+                                                            {
+                                                              staticClass:
+                                                                "headline"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "حذف دسترسی"
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("v-card-text", [
+                                                            _vm._v(
+                                                              "آیا از حذف " +
+                                                                _vm._s(
+                                                                  _vm.dialogPermissionName
+                                                                ) +
+                                                                " اطمینان دارید؟"
                                                             )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ]
-                                                    )
-                                                  }
-                                                ),
-                                                0
+                                                          ]),
+                                                          _vm._v(" "),
+                                                          _c(
+                                                            "v-card-actions",
+                                                            [
+                                                              _c("v-spacer"),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-btn",
+                                                                {
+                                                                  attrs: {
+                                                                    icon: "",
+                                                                    color:
+                                                                      "green darken-1",
+                                                                    text: ""
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      _vm.dialogPermission = false
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [_vm._v("خیر")]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-btn",
+                                                                {
+                                                                  attrs: {
+                                                                    icon: "",
+                                                                    color:
+                                                                      "green darken-1",
+                                                                    text: ""
+                                                                  },
+                                                                  on: {
+                                                                    click: function(
+                                                                      $event
+                                                                    ) {
+                                                                      ;(_vm.dialogPermission = false),
+                                                                        _vm.delPer(
+                                                                          _vm.dialogPermissionId,
+                                                                          _vm.dialogPermissionName
+                                                                        )
+                                                                    }
+                                                                  }
+                                                                },
+                                                                [
+                                                                  _c(
+                                                                    "v-icon",
+                                                                    {
+                                                                      attrs: {
+                                                                        color:
+                                                                          "red",
+                                                                        dark: ""
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        "mdi-delete"
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ],
+                                                2
                                               )
                                             ]
                                           },
@@ -61567,7 +62159,7 @@ var render = function() {
                                       ],
                                       null,
                                       false,
-                                      64532310
+                                      884634437
                                     )
                                   })
                                 ],
@@ -61620,6 +62212,36 @@ var render = function() {
     { attrs: { fluid: "" } },
     [
       _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: _vm.timeout, color: _vm.snackbarBg, left: true },
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _vm._v("\n        " + _vm._s(_vm.snackbarText) + "\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: _vm.snackbarBtn, text: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            بستن\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "v-item-group",
         [
           _c(
@@ -61658,267 +62280,1528 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-row",
-                _vm._l(_vm.users.all, function(user) {
-                  return _c(
-                    "v-col",
-                    { key: user.id, attrs: { cols: "12", md: "4" } },
-                    [
-                      _c("v-item", {
-                        scopedSlots: _vm._u(
-                          [
-                            {
-                              key: "default",
-                              fn: function() {
-                                return [
-                                  _c(
-                                    "v-card",
-                                    {
-                                      staticClass: "mx-auto",
-                                      attrs: {
-                                        "max-width": "344",
-                                        outlined: ""
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "v-list-item",
-                                        { attrs: { "three-line": "" } },
-                                        [
-                                          _c(
-                                            "v-list-item-content",
-                                            [
-                                              _c("div", {
-                                                staticClass:
-                                                  "overline mb-4 text-right",
-                                                domProps: {
-                                                  textContent: _vm._s(
-                                                    user.email
-                                                  )
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c("v-list-item-title", {
-                                                staticClass:
-                                                  "headline mb-1 text-right",
-                                                domProps: {
-                                                  textContent: _vm._s(user.name)
-                                                }
-                                              }),
-                                              _vm._v(" "),
-                                              _c("v-list-item-subtitle", {
-                                                staticClass: "text-right",
-                                                domProps: {
-                                                  textContent: _vm._s(
-                                                    user.email
-                                                  )
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-list-item-avatar",
-                                            { attrs: { tile: "", size: "80" } },
-                                            [
-                                              _c("v-avatar", [
-                                                _c("img", {
-                                                  attrs: {
-                                                    src:
-                                                      "/storage/avatar/" +
-                                                      user.avatar
-                                                  }
-                                                })
-                                              ])
-                                            ],
-                                            1
-                                          )
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-card-actions",
-                                        [
-                                          _c("v-spacer"),
-                                          _vm._v(" "),
-                                          _vm.users.all.length > 1
-                                            ? _c(
-                                                "v-dialog",
-                                                {
-                                                  attrs: {
-                                                    persistent: "",
-                                                    "max-width": "290"
+                [
+                  _vm._l(_vm.users.all, function(user) {
+                    return _c(
+                      "v-col",
+                      { key: user.id, attrs: { cols: "12", md: "4" } },
+                      [
+                        _c("v-item", {
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "default",
+                                fn: function() {
+                                  return [
+                                    _c(
+                                      "v-card",
+                                      {
+                                        staticClass: "mx-auto",
+                                        attrs: {
+                                          "max-width": "344",
+                                          outlined: ""
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "v-list-item",
+                                          { attrs: { "three-line": "" } },
+                                          [
+                                            _c(
+                                              "v-list-item-content",
+                                              [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "overline mb-4 text-right"
                                                   },
-                                                  scopedSlots: _vm._u(
-                                                    [
-                                                      {
-                                                        key: "activator",
-                                                        fn: function(ref) {
-                                                          var on = ref.on
-                                                          return [
-                                                            _c(
-                                                              "v-btn",
-                                                              {
-                                                                attrs: {
-                                                                  text: "",
-                                                                  icon: "",
-                                                                  small: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _c(
-                                                                  "v-icon",
-                                                                  _vm._g(
-                                                                    {
-                                                                      attrs: {
-                                                                        color:
-                                                                          "warning",
-                                                                        dark: ""
-                                                                      }
-                                                                    },
-                                                                    on
-                                                                  ),
-                                                                  [
-                                                                    _vm._v(
-                                                                      "mdi-account-cancel"
-                                                                    )
-                                                                  ]
-                                                                )
-                                                              ],
-                                                              1
-                                                            )
-                                                          ]
-                                                        }
-                                                      }
-                                                    ],
-                                                    null,
-                                                    true
-                                                  ),
-                                                  model: {
-                                                    value: _vm.dialog,
-                                                    callback: function($$v) {
-                                                      _vm.dialog = $$v
-                                                    },
-                                                    expression: "dialog"
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        user.jCreated_atDiff
+                                                      ) +
+                                                        " - " +
+                                                        _vm._s(user.jCreated_at)
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("v-list-item-title", {
+                                                  staticClass:
+                                                    "headline mb-2 text-right",
+                                                  domProps: {
+                                                    textContent: _vm._s(
+                                                      user.name
+                                                    )
                                                   }
-                                                },
-                                                [
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "v-card",
-                                                    [
-                                                      _c(
-                                                        "v-card-title",
-                                                        {
-                                                          staticClass:
-                                                            "headline"
-                                                        },
-                                                        [_vm._v("حذف کاربر")]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c("v-card-text", [
-                                                        _vm._v(
-                                                          "آیا از حذف " +
-                                                            _vm._s(user.name) +
-                                                            " اطمینان دارید؟"
-                                                        )
-                                                      ]),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "v-card-actions",
-                                                        [
-                                                          _c("v-spacer"),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "v-btn",
+                                                }),
+                                                _vm._v(" "),
+                                                user.etiquette
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
                                                             {
-                                                              attrs: {
-                                                                icon: "",
-                                                                color:
-                                                                  "green darken-1",
-                                                                text: ""
-                                                              },
-                                                              on: {
-                                                                click: function(
-                                                                  $event
-                                                                ) {
-                                                                  _vm.dialog = false
-                                                                }
-                                                              }
-                                                            },
-                                                            [_vm._v("خیر")]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "v-btn",
-                                                            {
-                                                              attrs: {
-                                                                icon: "",
-                                                                color:
-                                                                  "green darken-1",
-                                                                text: ""
-                                                              },
-                                                              on: {
-                                                                click: function(
-                                                                  $event
-                                                                ) {
-                                                                  ;(_vm.dialog = false),
-                                                                    (_vm.delete_id =
-                                                                      user.id),
-                                                                    _vm.del()
-                                                                }
-                                                              }
-                                                            },
-                                                            [
-                                                              _c(
-                                                                "v-icon",
-                                                                {
-                                                                  attrs: {
-                                                                    color:
-                                                                      "warning",
-                                                                    dark: ""
-                                                                  }
-                                                                },
-                                                                [
-                                                                  _vm._v(
-                                                                    "mdi-account-cancel"
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            {
+                                                                              attrs: {
+                                                                                dark:
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-account-circle-outline"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.etiquette
+                                                                          ) +
+                                                                          "\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
                                                                   )
                                                                 ]
-                                                              )
-                                                            ],
-                                                            1
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("سمت")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.email
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            href:
+                                                                              "mailto:" +
+                                                                              user.email,
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            {
+                                                                              attrs: {
+                                                                                dark:
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-email-send"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.email
+                                                                          ) +
+                                                                          "\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v(
+                                                            "پست الکترونیکی"
                                                           )
-                                                        ],
-                                                        1
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                ],
-                                                1
-                                              )
-                                            : _vm._e()
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.mobile
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "a",
+                                                                        {
+                                                                          attrs: {
+                                                                            href:
+                                                                              "tel:" +
+                                                                              user.mobile
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-btn",
+                                                                            {
+                                                                              staticClass:
+                                                                                "mx-2",
+                                                                              attrs: {
+                                                                                flat:
+                                                                                  "",
+                                                                                icon:
+                                                                                  "",
+                                                                                fab:
+                                                                                  "",
+                                                                                "x-small":
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _c(
+                                                                                "v-icon",
+                                                                                {
+                                                                                  attrs: {
+                                                                                    dark:
+                                                                                      ""
+                                                                                  }
+                                                                                },
+                                                                                [
+                                                                                  _vm._v(
+                                                                                    "mdi-cellphone"
+                                                                                  )
+                                                                                ]
+                                                                              )
+                                                                            ],
+                                                                            1
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                            " +
+                                                                          _vm._s(
+                                                                            user.mobile
+                                                                          ) +
+                                                                          "\n                                            "
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("همراه")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.insurance
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1"
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          directives: [
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:copy",
+                                                                              value:
+                                                                                user.card,
+                                                                              expression:
+                                                                                "user.card",
+                                                                              arg:
+                                                                                "copy"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:success",
+                                                                              value:
+                                                                                _vm.onCopySuccess,
+                                                                              expression:
+                                                                                "onCopySuccess",
+                                                                              arg:
+                                                                                "success"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:error",
+                                                                              value:
+                                                                                _vm.onCopyError,
+                                                                              expression:
+                                                                                "onCopyError",
+                                                                              arg:
+                                                                                "error"
+                                                                            }
+                                                                          ],
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            {
+                                                                              attrs: {
+                                                                                dark:
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-content-copy"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.insurance
+                                                                          ) +
+                                                                          "\n\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("کد بیمه")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.card
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          directives: [
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:copy",
+                                                                              value:
+                                                                                user.card,
+                                                                              expression:
+                                                                                "user.card",
+                                                                              arg:
+                                                                                "copy"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:success",
+                                                                              value:
+                                                                                _vm.onCopySuccess,
+                                                                              expression:
+                                                                                "onCopySuccess",
+                                                                              arg:
+                                                                                "success"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:error",
+                                                                              value:
+                                                                                _vm.onCopyError,
+                                                                              expression:
+                                                                                "onCopyError",
+                                                                              arg:
+                                                                                "error"
+                                                                            }
+                                                                          ],
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            {
+                                                                              attrs: {
+                                                                                dark:
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-content-copy"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.card.slice(
+                                                                              0,
+                                                                              4
+                                                                            )
+                                                                          ) +
+                                                                          "-" +
+                                                                          _vm._s(
+                                                                            user.card.slice(
+                                                                              4,
+                                                                              8
+                                                                            )
+                                                                          ) +
+                                                                          "-" +
+                                                                          _vm._s(
+                                                                            user.card.slice(
+                                                                              8,
+                                                                              12
+                                                                            )
+                                                                          ) +
+                                                                          "-" +
+                                                                          _vm._s(
+                                                                            user.card.slice(
+                                                                              12,
+                                                                              16
+                                                                            )
+                                                                          ) +
+                                                                          "\n\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("کارت بانکی")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.bank
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-bank"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.bank
+                                                                          ) +
+                                                                          "\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("بانک")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                user.account_code
+                                                  ? _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { right: "" },
+                                                        scopedSlots: _vm._u(
+                                                          [
+                                                            {
+                                                              key: "activator",
+                                                              fn: function(
+                                                                ref
+                                                              ) {
+                                                                var on = ref.on
+                                                                return [
+                                                                  _c(
+                                                                    "v-list-item-subtitle",
+                                                                    _vm._g(
+                                                                      {
+                                                                        staticClass:
+                                                                          "text-right mb-1",
+                                                                        on: {
+                                                                          click: function(
+                                                                            $event
+                                                                          ) {}
+                                                                        }
+                                                                      },
+                                                                      on
+                                                                    ),
+                                                                    [
+                                                                      _c(
+                                                                        "v-btn",
+                                                                        {
+                                                                          directives: [
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:copy",
+                                                                              value:
+                                                                                user.account_code,
+                                                                              expression:
+                                                                                "user.account_code",
+                                                                              arg:
+                                                                                "copy"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:success",
+                                                                              value:
+                                                                                _vm.onCopySuccess,
+                                                                              expression:
+                                                                                "onCopySuccess",
+                                                                              arg:
+                                                                                "success"
+                                                                            },
+                                                                            {
+                                                                              name:
+                                                                                "clipboard",
+                                                                              rawName:
+                                                                                "v-clipboard:error",
+                                                                              value:
+                                                                                _vm.onCopyError,
+                                                                              expression:
+                                                                                "onCopyError",
+                                                                              arg:
+                                                                                "error"
+                                                                            }
+                                                                          ],
+                                                                          staticClass:
+                                                                            "mx-2",
+                                                                          attrs: {
+                                                                            flat:
+                                                                              "",
+                                                                            icon:
+                                                                              "",
+                                                                            fab:
+                                                                              "",
+                                                                            "x-small":
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _c(
+                                                                            "v-icon",
+                                                                            {
+                                                                              attrs: {
+                                                                                dark:
+                                                                                  ""
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "mdi-content-copy"
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        ],
+                                                                        1
+                                                                      ),
+                                                                      _vm._v(
+                                                                        "\n                                                " +
+                                                                          _vm._s(
+                                                                            user.account_code
+                                                                          ) +
+                                                                          "\n\n                                            "
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  )
+                                                                ]
+                                                              }
+                                                            }
+                                                          ],
+                                                          null,
+                                                          true
+                                                        )
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v("حساب بانکی")
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e()
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-list-item-avatar",
+                                              {
+                                                attrs: { tile: "", size: "50" }
+                                              },
+                                              [
+                                                _c("v-avatar", [
+                                                  _c("img", {
+                                                    attrs: {
+                                                      src:
+                                                        "/storage/avatar/" +
+                                                        user.avatar
+                                                    }
+                                                  })
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-card-actions",
+                                          [
+                                            _c("v-spacer"),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  text: "",
+                                                  icon: "",
+                                                  small: "",
+                                                  fab: ""
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    ;(_vm.userEditDialog = user),
+                                                      (_vm.editUser = true)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v("mdi-account-edit")
+                                                ])
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            user.id != _vm.user_id
+                                              ? _c(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: {
+                                                      text: "",
+                                                      icon: "",
+                                                      small: ""
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        ;(_vm.dialog = true),
+                                                          (_vm.delete_id =
+                                                            user.id),
+                                                          (_vm.delete_name =
+                                                            user.name)
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "v-icon",
+                                                      {
+                                                        attrs: { color: "red" }
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          "mdi-account-cancel"
+                                                        )
+                                                      ]
+                                                    )
+                                                  ],
+                                                  1
+                                                )
+                                              : _vm._e()
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ]
+                                },
+                                proxy: true
+                              }
+                            ],
+                            null,
+                            true
+                          )
+                        })
+                      ],
+                      1
+                    )
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-dialog",
+                    {
+                      attrs: { "max-width": "290" },
+                      model: {
+                        value: _vm.dialog,
+                        callback: function($$v) {
+                          _vm.dialog = $$v
+                        },
+                        expression: "dialog"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card",
+                        [
+                          _c("v-card-title", { staticClass: "headline" }, [
+                            _vm._v("حذف کاربر")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-card-text", [
+                            _vm._v(
+                              "آیا از حذف " +
+                                _vm._s(_vm.delete_name) +
+                                " اطمینان دارید؟"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-actions",
+                            [
+                              _c("v-spacer"),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: {
+                                    icon: "",
+                                    color: "green darken-1",
+                                    text: ""
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dialog = false
+                                    }
+                                  }
+                                },
+                                [_vm._v("خیر")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { icon: "", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      ;(_vm.dialog = false),
+                                        _vm.del(),
+                                        (_vm.delete_id = ""),
+                                        (_vm.delete_name = "")
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-icon",
+                                    { attrs: { color: "red", dark: "" } },
+                                    [_vm._v("mdi-account-cancel")]
                                   )
-                                ]
-                              },
-                              proxy: true
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-dialog",
+                    {
+                      attrs: {
+                        fullscreen: "",
+                        "hide-overlay": "",
+                        transition: "dialog-bottom-transition"
+                      },
+                      model: {
+                        value: _vm.editUser,
+                        callback: function($$v) {
+                          _vm.editUser = $$v
+                        },
+                        expression: "editUser"
+                      }
+                    },
+                    [
+                      _c("v-card", [
+                        _c(
+                          "form",
+                          {
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.submitPer($event)
+                              }
                             }
+                          },
+                          [
+                            _c(
+                              "v-toolbar",
+                              { attrs: { dark: "", color: "amber" } },
+                              [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { icon: "", dark: "" },
+                                    on: {
+                                      click: function($event) {
+                                        _vm.editUser = false
+                                      }
+                                    }
+                                  },
+                                  [_c("v-icon", [_vm._v("mdi-close")])],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c("v-toolbar-title", [
+                                  _vm._v(
+                                    "ویرایش کاربر\n                                     " +
+                                      _vm._s(_vm.userEditDialog.name) +
+                                      "\n                                "
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("v-spacer"),
+                                _vm._v(" "),
+                                _c(
+                                  "v-toolbar-items",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: { dark: "", text: "" },
+                                        on: { click: _vm.updateUser }
+                                      },
+                                      [_vm._v("ویرایش")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list",
+                              {
+                                staticClass: "text-right",
+                                attrs: { "three-line": "", subheader: "" }
+                              },
+                              [
+                                _c(
+                                  "v-list-item",
+                                  [
+                                    _c(
+                                      "v-list-item-content",
+                                      [
+                                        _c(
+                                          "v-container",
+                                          { attrs: { fluid: "" } },
+                                          [
+                                            _c(
+                                              "v-row",
+                                              {
+                                                attrs: {
+                                                  align: _vm.center,
+                                                  justify: _vm.center
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "3" } },
+                                                  [
+                                                    _c(
+                                                      "v-tooltip",
+                                                      {
+                                                        attrs: { top: "" },
+                                                        scopedSlots: _vm._u([
+                                                          {
+                                                            key: "activator",
+                                                            fn: function(ref) {
+                                                              var on = ref.on
+                                                              return [
+                                                                _vm
+                                                                  .userEditDialog
+                                                                  .avatar
+                                                                  ? _c(
+                                                                      "v-img",
+                                                                      _vm._g(
+                                                                        {
+                                                                          attrs: {
+                                                                            src:
+                                                                              "/storage/avatar/" +
+                                                                              _vm
+                                                                                .userEditDialog
+                                                                                .avatar,
+                                                                            alt:
+                                                                              _vm
+                                                                                .userEditDialog
+                                                                                .name,
+                                                                            "aspect-ratio":
+                                                                              "1"
+                                                                          },
+                                                                          on: {
+                                                                            click: function(
+                                                                              $event
+                                                                            ) {
+                                                                              _vm.changeAvatar = !_vm.changeAvatar
+                                                                            }
+                                                                          }
+                                                                        },
+                                                                        on
+                                                                      )
+                                                                    )
+                                                                  : _vm._e()
+                                                              ]
+                                                            }
+                                                          }
+                                                        ])
+                                                      },
+                                                      [
+                                                        _vm._v(" "),
+                                                        _c("span", [
+                                                          _vm._v(
+                                                            "تعویض عکس پروفایل"
+                                                          )
+                                                        ])
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _vm.changeAvatar
+                                                      ? _c("v-file-input", {
+                                                          attrs: {
+                                                            accept: "image/*",
+                                                            "show-size": "",
+                                                            label:
+                                                              "تصویر پروفایل",
+                                                            "prepend-icon":
+                                                              "mdi-camera"
+                                                          },
+                                                          model: {
+                                                            value: _vm.avatar,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.avatar = $$v
+                                                            },
+                                                            expression: "avatar"
+                                                          }
+                                                        })
+                                                      : _vm._e()
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-row",
+                                              {
+                                                attrs: {
+                                                  align: _vm.center,
+                                                  justify: _vm.center
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "6" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        label: "پست الکترونیک",
+                                                        disabled: ""
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .email,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "email",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.email"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "6" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "25",
+                                                        label: "سمت سازمانی"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .etiquette,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "etiquette",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.etiquette"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "25",
+                                                        label: "نام کاربر"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .name,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "name",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.name"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "11",
+                                                        label: "شماره همراه"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .mobile,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "mobile",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.mobile"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "8",
+                                                        label: "کد بیمه"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .insurance,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "insurance",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.insurance"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "16",
+                                                        label: "کارت بانکی"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .card,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "card",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.card"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "16",
+                                                        label: "بانک"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .bank,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "bank",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.bank"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "4" } },
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "25",
+                                                        label:
+                                                          "شماره حساب بانکی"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .account_code,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "account_code",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.account_code"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  [
+                                                    _c("v-text-field", {
+                                                      attrs: {
+                                                        rules: _vm.rulesPer,
+                                                        counter: "250",
+                                                        label: "توضیحات کاربر"
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .comment,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "comment",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.comment"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
                           ],
-                          null,
-                          true
+                          1
                         )
-                      })
+                      ])
                     ],
                     1
                   )
-                }),
-                1
+                ],
+                2
               )
             ],
             1
@@ -61989,37 +63872,16 @@ var render = function() {
               _c("v-spacer"),
               _vm._v(" "),
               _c(
-                "v-tooltip",
+                "v-btn",
                 {
-                  attrs: { bottom: "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        return [
-                          _c(
-                            "v-switch",
-                            _vm._g(
-                              {
-                                on: { change: _vm.intervalSwap },
-                                model: {
-                                  value: _vm.switchX,
-                                  callback: function($$v) {
-                                    _vm.switchX = $$v
-                                  },
-                                  expression: "switchX"
-                                }
-                              },
-                              on
-                            )
-                          )
-                        ]
-                      }
-                    }
-                  ])
+                  staticClass: "mx-2",
+                  attrs: { flat: "", icon: "", fab: "", "x-small": "" },
+                  on: { click: _vm.read }
                 },
-                [_vm._v(" "), _c("span", [_vm._v("بروزرسانی خودکار")])]
+                [
+                  _c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-refresh")])
+                ],
+                1
               )
             ],
             1
@@ -120021,8 +121883,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/* harmony import */ var vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-persian-datetime-picker */ "./node_modules/vue-persian-datetime-picker/dist/vue-persian-datetime-picker.js");
-/* harmony import */ var vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_clipboard2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-clipboard2 */ "./node_modules/vue-clipboard2/vue-clipboard.js");
+/* harmony import */ var vue_clipboard2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_clipboard2__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-persian-datetime-picker */ "./node_modules/vue-persian-datetime-picker/dist/vue-persian-datetime-picker.js");
+/* harmony import */ var vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -120033,8 +121898,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_clipboard2__WEBPACK_IMPORTED_MODULE_4___default.a);
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('date-picker', vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_4___default.a);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('date-picker', vue_persian_datetime_picker__WEBPACK_IMPORTED_MODULE_5___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('dashboard', __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue")["default"]); //Services
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('notification', __webpack_require__(/*! ./components/services/Notification */ "./resources/js/components/services/Notification.vue")["default"]);

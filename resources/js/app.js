@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuetify from 'vuetify';
 import { routes } from './routes';
+import VueClipboard from 'vue-clipboard2';
 
 
 
@@ -11,6 +12,7 @@ window.Vue = require('vue');
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
+Vue.use(VueClipboard);
 
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker';
 Vue.component('date-picker', VuePersianDatetimePicker);

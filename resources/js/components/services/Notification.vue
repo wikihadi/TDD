@@ -123,7 +123,7 @@
                 // if (this.switchX){
                     this.timeToInterval = setInterval(() => {
                         this.read()
-                    }, 3000);
+                    }, 10000);
                 // } else {
                 //     window.clearInterval(this.timeToInterval)
                 // }

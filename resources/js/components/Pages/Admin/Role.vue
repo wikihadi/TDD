@@ -319,11 +319,24 @@
 
 
 
-                                            <v-btn text icon color="secondary" @click="delPer(item.id,item.name)">
+                                            <v-btn text icon color="secondary" @click="dialogPermissionOpen(item.id,item.name)">
                                                 <v-icon>mdi-delete</v-icon>
                                             </v-btn>
                                         </td>
                                     </tr>
+
+                                    <v-dialog v-model="dialogPermission" persistent max-width="290">
+                                    <v-card>
+                                    <v-card-title class="headline">حذف دسترسی</v-card-title>
+                                    <v-card-text>آیا از حذف {{dialogPermissionName}} اطمینان دارید؟</v-card-text>
+                                    <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn icon color="green darken-1" text @click="dialogPermission = false">خیر</v-btn>
+                                    <v-btn icon color="green darken-1" text @click="dialogPermission = false,delPer(dialogPermissionId,dialogPermissionName)"><v-icon color="red" dark>mdi-delete</v-icon></v-btn>
+                                    </v-card-actions>
+                                    </v-card>
+                                    </v-dialog>
+
                                     </tbody>
                                 </template>
                             </v-simple-table>
@@ -367,6 +380,8 @@
             snackbarBg:'',
             snackbarBtn:'blue',
             dialogPermission:false,
+            dialogPermissionId:'',
+            dialogPermissionName:'',
             dialogRoleDel:false,
             checkedPermission: [],
             titleURole:'',
@@ -379,6 +394,12 @@
 
         },
         methods:{
+            dialogPermissionOpen(id,name){
+                this.dialogPermission=true;
+                this.dialogPermissionId=id;
+                this.dialogPermissionName=name;
+
+            },
             updateRoleOn(id,name,checked){
                 this.updateRole=true;
                 this.titleURole=name;
@@ -497,6 +518,8 @@
                     .catch(function (error) {
                         console.log(error)
                     });
+                this.dialogPermissionId='';
+                this.dialogPermissionName='';
                 },
             delRole(id,name) {
                 const config = {
