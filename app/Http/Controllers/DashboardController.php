@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Activity;
 use App\Notifications\newUserRegistered;
 use App\User;
+use Carbon\Carbon;
+use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -31,17 +33,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-                $activity = new Activity([
+        $activity = new Activity([
             'note'   => 'ورود',
             'user_id'   => Auth::id(),
             'url'   => 'dashboard',
         ]);
         $activity->save();
     //    Notification::send($user, new newUserRegistered($activity));
-        $user = Auth::user();
-        $unreadnotifications=$user->unReadNotifications();
-        $readnotifications=$user->readNotifications();
 
-        return view('dashboard',compact('user','unreadnotifications','readnotifications'));
+        $user = Auth::user();
+        $d=Carbon::now();
+
+        return view('dashboard',compact('d','user'));
     }
 }

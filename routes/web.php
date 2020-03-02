@@ -39,21 +39,39 @@ use Spatie\Permission\Models\Role;
     //Route::get('/{any}', 'DashboardController@index')->where('any' , 'dashboard');
     //Route::get('/dashboard/{any}', 'DashboardController@index')->where('any' , '.*');
     Route::get('/dashboard/{vue_capture?}', 'DashboardController@index')->where('vue_capture', '[\/\w\.-]*');
-    Route::get('activity/read','ActivityController@read');
 
-//    Route::get('/dashboard/{vue_capture?}', function () {
-//        $activity = new Activity([
-//            'note'   => 'ورود',
-//            'user_id'   => Auth::id(),
-//            'url'   => 'dashboard',
-//        ]);
-//        $activity->save();
-//    //    Notification::send($user, new newUserRegistered($activity));
-//        $user = Auth::user();
-//        $unreadnotifications=$user->unReadNotifications();
-//        $readnotifications=$user->readNotifications();
-//
-//        return view('dashboard',compact('user','unreadnotifications','readnotifications'));
-//    })->where('vue_capture', '[\/\w\.-]*');
 
-//});
+Route::group(['middleware' => ['auth']], function () {
+
+    //    RoleController
+    Route::get('admin/users/rolePer/get','RoleController@usersRolePerGet');
+    Route::post('admin/users/permission/add','RoleController@addPermission');
+    Route::post('admin/users/role/update', 'RoleController@updateRole');
+    Route::post('admin/users/role/add','RoleController@addRole');
+    Route::post('admin/users/permission/del','RoleController@delPer');
+    Route::post('admin/users/role/del','RoleController@delRole');
+
+
+    //ActivityController
+    Route::get('activity/read', 'ActivityController@read');
+
+
+
+    //UserController
+    Route::post('admin/users/update','UserController@update');
+    Route::get('admin/users/get','UserController@usersGet');
+    Route::post('admin/users/del','UserController@destroy');
+
+
+
+    //NotificationController
+    Route::get('notification/read','NotificationController@read');
+    Route::post('notification/markAllAsRead','NotificationController@markAllAsRead');
+
+
+
+    //ContactController
+    Route::post('contact/add','ContactController@add');
+    Route::get('contact/read','ContactController@read');
+
+});

@@ -8,6 +8,7 @@ use App\User;
 use App\Notifications\newUserRegistered;
 //use http\Client\Curl\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 class ContactController extends Controller
@@ -29,17 +30,17 @@ class ContactController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function add(Request $request){
+        $user=Auth::user();
         $contact = Contact::create($request->all());
 
         $activity = new Activity([
             'code'    => 1501,
             'note'   => 'افزودن شماره تماس',
-            'user_id'   => $request->user_id,
-            'user_name'   => $request->user_name,
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
             'contact_id'   => $contact->id,
         ]);
         $activity->save();
-        $user = User::find($request->user_id);
         Notification::send($user, new newUserRegistered($activity));
         return Contact::all();
     }

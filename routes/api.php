@@ -18,28 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-//Contact APIs
-Route::post('contact/add','ContactController@add');
-Route::get('contact/read','ContactController@read');
-
-//Activity Apis
-Route::get('activity/read','ActivityController@read');
-
-//Notification Api
-Route::get('notification/read','NotificationController@read');
-Route::get('notification/markAllAsRead','NotificationController@markAllAsRead');
 
 
-//Admin User
-Route::get('admin/users/get','UserController@usersGet');
-Route::post('admin/users/del','UserController@destroy');
-Route::post('admin/users/update','UserController@update');
 
 
-//Role
-Route::get('admin/users/rolePer/get','RoleController@usersRolePerGet');
-Route::post('admin/users/rolePer/addPer','RoleController@addPer');
-Route::post('admin/users/rolePer/addRole','RoleController@addRole');
-Route::post('admin/users/rolePer/updateRole','RoleController@updateRole');
-Route::post('admin/users/rolePer/delPer','RoleController@delPer');
-Route::post('admin/users/rolePer/delRole','RoleController@delRole');
+
+
+

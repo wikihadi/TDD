@@ -352,7 +352,7 @@
         }),
         methods: {
             read(){
-                axios.get('/api/contact/read')
+                axios.get('/contact/read')
                     .then(
                         response =>
                             this.items = response.data
@@ -400,7 +400,7 @@
 
 
 
-                axios.post('/api/contact/add', formData, config)
+                axios.post('/contact/add', formData, config)
                     .then(
                         response =>
                             this.items = response.data,

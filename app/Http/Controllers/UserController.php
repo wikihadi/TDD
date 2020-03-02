@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Activity;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,23 +16,26 @@ class UserController extends Controller
             $loop->jCreated_atDiff = verta($loop->created_at)->formatDifference();
         }
         return response()->json([
-            'all' => $users
+            'all' => $users,
+            'me' => Auth::user()
         ]) ;
     }
 
     public function destroy(Request $request){
+        $user =  Auth::user();
 
         User::find($request['del_id'])->delete();
         $activity = new Activity([
             'code'    => 8009,
             'note'   => 'حذف کاربر',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         return $this->usersGet();
     }
     public function update(Request $request){
+
         $userPost = json_decode($request['user']);
 
         $user = User::find($userPost->id);
@@ -53,12 +57,13 @@ class UserController extends Controller
         }
 
             $user->save();
+        $user =  Auth::user();
 
         $activity = new Activity([
             'code'    => 8002,
             'note'   => 'ویرایش کاربر',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         return $this->usersGet();

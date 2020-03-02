@@ -216,7 +216,7 @@
                                     <v-btn text icon small fab @click="userEditDialog=user,editUser=true">
                                     <v-icon>mdi-account-edit</v-icon>
                                     </v-btn>
-                                    <v-btn text icon small @click="dialog=true,delete_id=user.id,delete_name=user.name" v-if="user.id!=user_id">
+                                    <v-btn text icon small @click="dialog=true,delete_id=user.id,delete_name=user.name" v-if="user.id!=users.me.id">
                                         <v-icon color="red">mdi-account-cancel</v-icon>
                                     </v-btn>
                                 </v-card-actions>
@@ -272,7 +272,7 @@
                                                     <v-col md="3">
                                                         <v-tooltip top>
                                                         <template v-slot:activator="{ on }">
-                                                            <v-img @click="changeAvatar=!changeAvatar" v-on="on" :src="'/storage/avatar/' + userEditDialog.avatar" :alt="userEditDialog.name" aspect-ratio="1" v-if="userEditDialog.avatar"></v-img>
+                                                            <v-img @click="changeAvatar=!changeAvatar" v-on="on" :src="'/storage/avatar/' + userEditDialog.avatar" alt="تصویر پروفایل" aspect-ratio="1" v-if="userEditDialog.avatar"></v-img>
 
                                                         </template>
                                                         <span>تعویض عکس پروفایل</span>
@@ -359,6 +359,11 @@
                                                                 label="توضیحات کاربر"
                                                         ></v-text-field>
                                                     </v-col>
+                                                    <v-col sm="12">
+                                                        <v-btn color="success" dark flat @click="editUser = false">انصراف</v-btn>
+                                                        <v-btn color="secondary" dark flat  @click="updateUser">ویرایش</v-btn>
+
+                                                    </v-col>
                                                 </v-row>
                                             </v-container>
                                         </v-list-item-content>
@@ -384,8 +389,6 @@
             users:[],
             delete_id:'',
             delete_name:'',
-            user_id:document.head.querySelector("meta[name=user_id]").content,
-            user_name:document.head.querySelector("meta[name=user_name]").content,
             snackbarText:'',
             snackbar: false,
             timeout: 2000,
@@ -397,7 +400,7 @@
             avatar:''
         }),
         mounted() {
-            this.read()
+            this.read();
         },
         methods:{
             updateUser(){
@@ -410,9 +413,7 @@
                 formData.append('user', json_userEditDialog);
                 formData.append('avatar', this.avatar);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/update', formData, config)
+                axios.post('/admin/users/update', formData, config)
                     .then(
                         this.read(0),
                         this.editUser=false,
@@ -438,10 +439,12 @@
                 this.snackbarOn('اوپس... کپی نشد','red darken-2','light')
             },
             read(){
-                axios.get('/api/admin/users/get')
+                axios.get('/admin/users/get')
                     .then(
                         response =>
-                            this.users = response.data
+                            this.users = response.data,
+
+
                     )
                     .catch(function (error) {
                         console.log(error)
@@ -467,11 +470,9 @@
 
                 formData.append('del_id', this.delete_id);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
 
 
-                axios.post('/api/admin/users/del', formData, config)
+                axios.post('/admin/users/del', formData, config)
                     .then(
                         response =>
                             this.users = response.data

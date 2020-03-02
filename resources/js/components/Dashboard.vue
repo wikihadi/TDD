@@ -209,20 +209,20 @@
             </v-avatar>
             <span>{{user.name}}</span>
             <v-spacer />
-            <span>&copy; 2020</span>
+            <span>{{d}}</span>
         </v-footer>
     </v-app>
 </template>
 
 <script>
     export default {
-        props:['user'],
+        props:['user','d'],
         data: () => ({
             drawer: null,
             drawerRight: null,
             right: false,
             left: false,
-            search:''
+            search:'',
         }),
         mounted: function () {
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Activity;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -32,22 +33,21 @@ class RoleController extends Controller
     }
 
 //    add permission
-    public function addPer(Request $request){
-
-
+    public function addPermission(Request $request){
+        $user =  Auth::user();
         $permission = Permission::create(['name' => $request['name']]);
         $activity = new Activity([
             'code'    => 8011,
             'note'   => 'افزودن دسترسی',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         return $this->usersRolePerGet();
     }
 //    add Role
     public function addRole(Request $request){
-
+        $user =  Auth::user();
 
         $role = Role::create(['name' => $request['name']]);
 
@@ -57,14 +57,15 @@ class RoleController extends Controller
         $activity = new Activity([
             'code'    => 8021,
             'note'   => 'افزودن نقش',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         return $this->usersRolePerGet();
     }
 //    update Role
     public function updateRole(Request $request){
+        $user = Auth::user();
 
         $role = Role::findById($request['id']);
         if ($role['name']!==$request['name']){
@@ -76,20 +77,22 @@ class RoleController extends Controller
         $activity = new Activity([
             'code'    => 8022,
             'note'   => 'ویرایش نقش',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         return $this->usersRolePerGet();
     }
 //    del permission
     public function delPer(Request $request){
+        $user =  Auth::user();
+
         $permission = Permission::find($request['del_id']);
         $activity = new Activity([
             'code'    => 8019,
             'note'   => 'حذف دسترسی',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         $permission->delete();
@@ -97,12 +100,14 @@ class RoleController extends Controller
     }
 //    del Role
     public function delRole(Request $request){
+        $user =  Auth::user();
+
         $Role = Role::find($request['del_id']);
         $activity = new Activity([
             'code'    => 8029,
             'note'   => 'حذف نقش',
-            'user_id'   => $request['user_id'],
-            'user_name'   => $request['user_name'],
+            'user_id'   => $user->id,
+            'user_name'   => $user->name,
         ]);
         $activity->save();
         $Role->delete();

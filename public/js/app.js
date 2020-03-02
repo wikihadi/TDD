@@ -2125,7 +2125,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['user'],
+  props: ['user', 'd'],
   data: function data() {
     return {
       drawer: null,
@@ -2994,8 +2994,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-      user_id: document.head.querySelector("meta[name=user_id]").content,
-      user_name: document.head.querySelector("meta[name=user_name]").content,
+      // user_id:document.head.querySelector("meta[name=user_id]").content,
+      // user_name:document.head.querySelector("meta[name=user_name]").content,
       showPermissions: false,
       addRole: false,
       addPer: false,
@@ -3058,9 +3058,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('permissions', this.checkedPermission);
       formData.append('name', this.titleURole);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/rolePer/updateRole', formData, config).then(this.read(0), this.updateRole = false, this.titleURole = '', this.snackbarOn('نقش با موفقیت ویرایش شد', 'dark', 'green', 2000))["catch"](function (error) {
+      axios.post('/admin/users/role/update', formData, config).then(this.read(0), this.updateRole = false, this.titleURole = '', this.snackbarOn('نقش با موفقیت ویرایش شد', 'dark', 'green', 2000))["catch"](function (error) {
         this.snackbarOn('ظاهرا مشکلی در ویرایش نقش بوجود آمده کد 48022', 'dark', 'green', 2000), console.log(error);
       });
     },
@@ -3075,7 +3073,7 @@ __webpack_require__.r(__webpack_exports__);
     read: function read(x) {
       var _this = this;
 
-      axios.get('/api/admin/users/rolePer/get').then(function (response) {
+      axios.get('/admin/users/rolePer/get').then(function (response) {
         return _this.all = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -3094,9 +3092,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('name', this.titlePer);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/rolePer/addPer', formData, config).then(this.read(0), this.addPer = false, this.titlePer = '', this.snackbarOn('دسترسی با موفقیت افزوده شد', 'dark', 'green', 2000))["catch"](function (error) {
+      axios.post('/admin/users/permission/add', formData, config).then(this.read(0), this.addPer = false, this.titlePer = '', this.snackbarOn('دسترسی با موفقیت افزوده شد', 'dark', 'green', 2000))["catch"](function (error) {
         console.log(error);
       });
     },
@@ -3110,9 +3106,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('permissions', this.checkedPermission);
       formData.append('name', this.titleRole);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/rolePer/addRole', formData, config).then(this.read(0), this.addRole = false, this.titleRole = '', this.snackbarOn('نقش با موفقیت افزوده شد', 'dark', 'green', 2000))["catch"](function (error) {
+      axios.post('/admin/users/role/add', formData, config).then(this.read(0), this.addRole = false, this.titleRole = '', this.snackbarOn('نقش با موفقیت افزوده شد', 'dark', 'green', 2000))["catch"](function (error) {
         console.log(error);
       });
     },
@@ -3125,9 +3119,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('del_id', id);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/rolePer/delPer', formData, config).then(this.read(0), this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
+      axios.post('/admin/users/permission/del', formData, config).then(this.read(0), this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
         console.log(error);
       });
       this.dialogPermissionId = '';
@@ -3142,9 +3134,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('del_id', id);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/rolePer/delRole', formData, config).then(this.read(0), this.snackbarOn('نقش "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
+      axios.post('/admin/users/role/del', formData, config).then(this.read(0), this.snackbarOn('نقش "' + name + '" با موفقیت حذف شد', 'red', 'white', 2000))["catch"](function (error) {
         console.log(error);
       });
     }
@@ -3538,6 +3528,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Users",
   data: function data() {
@@ -3548,8 +3543,6 @@ __webpack_require__.r(__webpack_exports__);
       users: [],
       delete_id: '',
       delete_name: '',
-      user_id: document.head.querySelector("meta[name=user_id]").content,
-      user_name: document.head.querySelector("meta[name=user_name]").content,
       snackbarText: '',
       snackbar: false,
       timeout: 2000,
@@ -3576,9 +3569,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('user', json_userEditDialog);
       formData.append('avatar', this.avatar);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/update', formData, config).then(this.read(0), this.editUser = false, this.userEditDialog = [], this.snackbarOn('کاربر با موفقیت ویرایش شد', 'dark', 'green', 2000))["catch"](function (error) {
+      axios.post('/admin/users/update', formData, config).then(this.read(0), this.editUser = false, this.userEditDialog = [], this.snackbarOn('کاربر با موفقیت ویرایش شد', 'dark', 'green', 2000))["catch"](function (error) {
         console.log(error);
       });
     },
@@ -3599,7 +3590,7 @@ __webpack_require__.r(__webpack_exports__);
     read: function read() {
       var _this = this;
 
-      axios.get('/api/admin/users/get').then(function (response) {
+      axios.get('/admin/users/get').then(function (response) {
         return _this.users = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -3625,9 +3616,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('del_id', this.delete_id);
       formData.append('_token', this.csrf);
-      formData.append('user_id', this.user_id);
-      formData.append('user_name', this.user_name);
-      axios.post('/api/admin/users/del', formData, config).then(function (response) {
+      axios.post('/admin/users/del', formData, config).then(function (response) {
         return _this2.users = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -3793,11 +3782,6 @@ __webpack_require__.r(__webpack_exports__);
         return _this2.items = response.data;
       })["catch"](function (error) {
         console.log(error);
-        this.rows.items({
-          note: 'Error',
-          diff: 'error',
-          avatar: 'error'
-        });
       });
     }
   }
@@ -3920,18 +3904,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       notifications: [],
-      timeToInterval: '',
-      items2: [{
-        icon: 'mdi-bell',
-        iconClass: 'blue white--text',
-        title: 'Vacation itinerary',
-        subtitle: 'Jan 20, 2014'
-      }, {
-        icon: 'mdi-check',
-        iconClass: 'amber white--text',
-        title: 'Kitchen remodel',
-        subtitle: 'Jan 10, 2014'
-      }]
+      timeToInterval: ''
     };
   },
   created: function created() {
@@ -3944,17 +3917,14 @@ __webpack_require__.r(__webpack_exports__);
     intervalSwap: function intervalSwap() {
       var _this = this;
 
-      // if (this.switchX){
       this.timeToInterval = setInterval(function () {
         _this.read();
-      }, 10000); // } else {
-      //     window.clearInterval(this.timeToInterval)
-      // }
+      }, 10000);
     },
     read: function read() {
       var _this2 = this;
 
-      axios.get('/api/notification/read?user_id=' + this.user.id).then(function (response) {
+      axios.get('/notification/read').then(function (response) {
         return _this2.notifications = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -3963,7 +3933,7 @@ __webpack_require__.r(__webpack_exports__);
     markAllAsRead: function markAllAsRead() {
       var _this3 = this;
 
-      axios.get('/api/notification/markAllAsRead?user_id=' + this.user.id + '&user_name=' + this.user.name).then(function (response) {
+      axios.post('/notification/markAllAsRead').then(function (response) {
         return _this3.notifications = response.data;
       }, this.read())["catch"](function (error) {
         console.log(error);
@@ -4483,7 +4453,7 @@ __webpack_require__.r(__webpack_exports__);
     read: function read() {
       var _this = this;
 
-      axios.get('/api/contact/read').then(function (response) {
+      axios.get('/contact/read').then(function (response) {
         return _this.items = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -4525,7 +4495,7 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('note', this.note);
       formData.append('user_id', this.user.id);
       formData.append('user_name', this.user.name);
-      axios.post('/api/contact/add', formData, config).then(function (response) {
+      axios.post('/contact/add', formData, config).then(function (response) {
         return _this2.items = response.data;
       }, this.snackbar = true, this.reset(), this.addDialog = false)["catch"](function (error) {
         console.log(error);
@@ -59934,7 +59904,7 @@ var render = function() {
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),
-          _c("span", [_vm._v("© 2020")])
+          _c("span", [_vm._v(_vm._s(_vm.d))])
         ],
         1
       )
@@ -63165,7 +63135,7 @@ var render = function() {
                                               1
                                             ),
                                             _vm._v(" "),
-                                            user.id != _vm.user_id
+                                            user.id != _vm.users.me.id
                                               ? _c(
                                                   "v-btn",
                                                   {
@@ -63431,9 +63401,7 @@ var render = function() {
                                                                                 .userEditDialog
                                                                                 .avatar,
                                                                             alt:
-                                                                              _vm
-                                                                                .userEditDialog
-                                                                                .name,
+                                                                              "تصویر پروفایل",
                                                                             "aspect-ratio":
                                                                               "1"
                                                                           },
@@ -63775,6 +63743,47 @@ var render = function() {
                                                           "userEditDialog.comment"
                                                       }
                                                     })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { sm: "12" } },
+                                                  [
+                                                    _c(
+                                                      "v-btn",
+                                                      {
+                                                        attrs: {
+                                                          color: "success",
+                                                          dark: "",
+                                                          flat: ""
+                                                        },
+                                                        on: {
+                                                          click: function(
+                                                            $event
+                                                          ) {
+                                                            _vm.editUser = false
+                                                          }
+                                                        }
+                                                      },
+                                                      [_vm._v("انصراف")]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "v-btn",
+                                                      {
+                                                        attrs: {
+                                                          color: "secondary",
+                                                          dark: "",
+                                                          flat: ""
+                                                        },
+                                                        on: {
+                                                          click: _vm.updateUser
+                                                        }
+                                                      },
+                                                      [_vm._v("ویرایش")]
+                                                    )
                                                   ],
                                                   1
                                                 )

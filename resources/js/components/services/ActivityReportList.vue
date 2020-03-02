@@ -109,7 +109,6 @@
                         .then(response =>this.items = response.data)
                         .catch(function (error) {
                             console.log(error);
-                            this.rows.items({note: 'Error', diff: 'error' , avatar: 'error'});
                         });
             }
         }

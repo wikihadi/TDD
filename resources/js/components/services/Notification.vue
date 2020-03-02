@@ -105,10 +105,6 @@
         data: () => ({
             notifications:[],
             timeToInterval:'',
-            items2: [
-                { icon: 'mdi-bell', iconClass: 'blue white--text', title: 'Vacation itinerary', subtitle: 'Jan 20, 2014' },
-                { icon: 'mdi-check', iconClass: 'amber white--text', title: 'Kitchen remodel', subtitle: 'Jan 10, 2014' },
-            ],
         }),
         created(){
             this.read();
@@ -120,17 +116,12 @@
         },
         methods: {
             intervalSwap(){
-                // if (this.switchX){
                     this.timeToInterval = setInterval(() => {
                         this.read()
                     }, 10000);
-                // } else {
-                //     window.clearInterval(this.timeToInterval)
-                // }
-
             },
             read(){
-                axios.get('/api/notification/read?user_id=' + this.user.id)
+                axios.get('/notification/read')
                     .then(
                         response =>
                             this.notifications = response.data,
@@ -140,7 +131,7 @@
                     });
             },
             markAllAsRead(){
-                axios.get('/api/notification/markAllAsRead?user_id=' + this.user.id + '&user_name=' + this.user.name)
+                axios.post('/notification/markAllAsRead')
                     .then(
                         response =>
                             this.notifications = response.data,

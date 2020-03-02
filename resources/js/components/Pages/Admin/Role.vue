@@ -360,8 +360,8 @@
         name: "Role",
         data: () => ({
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            user_id:document.head.querySelector("meta[name=user_id]").content,
-            user_name:document.head.querySelector("meta[name=user_name]").content,
+            // user_id:document.head.querySelector("meta[name=user_id]").content,
+            // user_name:document.head.querySelector("meta[name=user_name]").content,
             showPermissions: false,
             addRole: false,
             addPer: false,
@@ -422,9 +422,7 @@
                 formData.append('permissions', this.checkedPermission);
                 formData.append('name', this.titleURole);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/rolePer/updateRole', formData, config)
+                axios.post('/admin/users/role/update', formData, config)
                     .then(
                         this.read(0),
                         this.updateRole=false,
@@ -445,7 +443,7 @@
                 this.timeout=2000;
             },
             read(x){
-                axios.get('/api/admin/users/rolePer/get')
+                axios.get('/admin/users/rolePer/get')
                     .then(
                         response =>
                             this.all = response.data,
@@ -466,9 +464,7 @@
                 let formData = new FormData();
                 formData.append('name', this.titlePer);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/rolePer/addPer', formData, config)
+                axios.post('/admin/users/permission/add', formData, config)
                     .then(
                             this.read(0),
                             this.addPer=false,
@@ -488,9 +484,7 @@
                 formData.append('permissions', this.checkedPermission);
                 formData.append('name', this.titleRole);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/rolePer/addRole', formData, config)
+                axios.post('/admin/users/role/add', formData, config)
                     .then(
                             this.read(0),
                             this.addRole=false,
@@ -508,9 +502,7 @@
                 let formData = new FormData();
                 formData.append('del_id', id);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/rolePer/delPer', formData, config)
+                axios.post('/admin/users/permission/del', formData, config)
                     .then(
                         this.read(0),
                         this.snackbarOn('دسترسی "' + name + '" با موفقیت حذف شد','red','white',2000)
@@ -528,9 +520,7 @@
                 let formData = new FormData();
                 formData.append('del_id', id);
                 formData.append('_token', this.csrf);
-                formData.append('user_id', this.user_id);
-                formData.append('user_name', this.user_name);
-                axios.post('/api/admin/users/rolePer/delRole', formData, config)
+                axios.post('/admin/users/role/del', formData, config)
                     .then(
                         this.read(0),
                         this.snackbarOn('نقش "' + name + '" با موفقیت حذف شد','red','white',2000)
