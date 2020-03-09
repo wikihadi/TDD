@@ -59,6 +59,41 @@
                                         <div class="overline mb-4 text-right">{{user.jCreated_atDiff}} - {{user.jCreated_at}}</div>
                                         <v-list-item-title class="headline mb-2 text-right" v-text="user.name"></v-list-item-title>
 
+                                        <v-tooltip right>
+                                            <template v-slot:activator="{ on }">
+                                                <v-list-item-subtitle @click="" v-on="on" class="text-right mb-1">
+                                                    <v-btn
+                                                            class="mx-2"
+                                                            flat
+                                                            icon
+                                                            fab
+                                                            x-small
+                                                            @click="userEditDialog=user,editUser=true"
+                                                    >
+                                                        <v-icon dark>mdi-account-circle</v-icon>
+                                                    </v-btn>
+                                                    <v-chip
+                                                            v-if="user.roles.length>0"
+                                                            class="ma-2"
+                                                            small
+                                                            v-for="r in user.roles"
+                                                            :key="r.id"
+                                                            color="amber"
+                                                    >
+                                                        {{r.name}}
+                                                    </v-chip>
+                                                    <v-chip
+                                                            v-if="user.roles.length<1"
+                                                            class="ma-2"
+                                                            small
+                                                            color="red"
+                                                    >
+                                                        بدون نقش
+                                                    </v-chip>
+                                                </v-list-item-subtitle>
+                                            </template>
+                                            <span>نقش کاربری</span>
+                                        </v-tooltip>
                                         <v-tooltip v-if="user.etiquette" right>
                                             <template v-slot:activator="{ on }">
                                                 <v-list-item-subtitle @click="" v-on="on" class="text-right mb-1">
@@ -351,13 +386,26 @@
                                                         ></v-text-field>
                                                     </v-col>
 
-                                                    <v-col>
+                                                    <v-col md="12">
                                                         <v-text-field
                                                                 v-model="userEditDialog.comment"
                                                                 :rules="rulesPer"
                                                                 counter="250"
                                                                 label="توضیحات کاربر"
                                                         ></v-text-field>
+                                                    </v-col>
+                                                    <v-col md="12">
+                                                        <v-select
+                                                                :hint="'این قسمت توسط مدیر تکمیل می گردد'"
+                                                                v-model="userEditDialog.roles"
+                                                                :items="users.rolesAll"
+                                                                item-text="name"
+                                                                item-value="id"
+                                                                attach
+                                                                chips
+                                                                label="نقش ها"
+                                                                multiple
+                                                        ></v-select>
                                                     </v-col>
                                                     <v-col sm="12">
                                                         <v-btn color="success" dark flat @click="editUser = false">انصراف</v-btn>
@@ -397,7 +445,7 @@
             changeAvatar:false,
             editUser:false,
             userEditDialog:[],
-            avatar:''
+            avatar:'',
         }),
         mounted() {
             this.read();
@@ -443,8 +491,6 @@
                     .then(
                         response =>
                             this.users = response.data,
-
-
                     )
                     .catch(function (error) {
                         console.log(error)

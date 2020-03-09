@@ -3533,6 +3533,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Users",
   data: function data() {
@@ -62307,6 +62355,151 @@ var render = function() {
                                                   }
                                                 }),
                                                 _vm._v(" "),
+                                                _c(
+                                                  "v-tooltip",
+                                                  {
+                                                    attrs: { right: "" },
+                                                    scopedSlots: _vm._u(
+                                                      [
+                                                        {
+                                                          key: "activator",
+                                                          fn: function(ref) {
+                                                            var on = ref.on
+                                                            return [
+                                                              _c(
+                                                                "v-list-item-subtitle",
+                                                                _vm._g(
+                                                                  {
+                                                                    staticClass:
+                                                                      "text-right mb-1",
+                                                                    on: {
+                                                                      click: function(
+                                                                        $event
+                                                                      ) {}
+                                                                    }
+                                                                  },
+                                                                  on
+                                                                ),
+                                                                [
+                                                                  _c(
+                                                                    "v-btn",
+                                                                    {
+                                                                      staticClass:
+                                                                        "mx-2",
+                                                                      attrs: {
+                                                                        flat:
+                                                                          "",
+                                                                        icon:
+                                                                          "",
+                                                                        fab: "",
+                                                                        "x-small":
+                                                                          ""
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          ;(_vm.userEditDialog = user),
+                                                                            (_vm.editUser = true)
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _c(
+                                                                        "v-icon",
+                                                                        {
+                                                                          attrs: {
+                                                                            dark:
+                                                                              ""
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "mdi-account-circle"
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ],
+                                                                    1
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _vm._l(
+                                                                    user.roles,
+                                                                    function(
+                                                                      r
+                                                                    ) {
+                                                                      return user
+                                                                        .roles
+                                                                        .length >
+                                                                        0
+                                                                        ? _c(
+                                                                            "v-chip",
+                                                                            {
+                                                                              key:
+                                                                                r.id,
+                                                                              staticClass:
+                                                                                "ma-2",
+                                                                              attrs: {
+                                                                                small:
+                                                                                  "",
+                                                                                color:
+                                                                                  "amber"
+                                                                              }
+                                                                            },
+                                                                            [
+                                                                              _vm._v(
+                                                                                "\n                                                    " +
+                                                                                  _vm._s(
+                                                                                    r.name
+                                                                                  ) +
+                                                                                  "\n                                                "
+                                                                              )
+                                                                            ]
+                                                                          )
+                                                                        : _vm._e()
+                                                                    }
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  user.roles
+                                                                    .length < 1
+                                                                    ? _c(
+                                                                        "v-chip",
+                                                                        {
+                                                                          staticClass:
+                                                                            "ma-2",
+                                                                          attrs: {
+                                                                            small:
+                                                                              "",
+                                                                            color:
+                                                                              "red"
+                                                                          }
+                                                                        },
+                                                                        [
+                                                                          _vm._v(
+                                                                            "\n                                                    بدون نقش\n                                                "
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    : _vm._e()
+                                                                ],
+                                                                2
+                                                              )
+                                                            ]
+                                                          }
+                                                        }
+                                                      ],
+                                                      null,
+                                                      true
+                                                    )
+                                                  },
+                                                  [
+                                                    _vm._v(" "),
+                                                    _c("span", [
+                                                      _vm._v("نقش کاربری")
+                                                    ])
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
                                                 user.etiquette
                                                   ? _c(
                                                       "v-tooltip",
@@ -63719,6 +63912,7 @@ var render = function() {
                                                 _vm._v(" "),
                                                 _c(
                                                   "v-col",
+                                                  { attrs: { md: "12" } },
                                                   [
                                                     _c("v-text-field", {
                                                       attrs: {
@@ -63741,6 +63935,44 @@ var render = function() {
                                                         },
                                                         expression:
                                                           "userEditDialog.comment"
+                                                      }
+                                                    })
+                                                  ],
+                                                  1
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-col",
+                                                  { attrs: { md: "12" } },
+                                                  [
+                                                    _c("v-select", {
+                                                      attrs: {
+                                                        hint:
+                                                          "این قسمت توسط مدیر تکمیل می گردد",
+                                                        items:
+                                                          _vm.users.rolesAll,
+                                                        "item-text": "name",
+                                                        "item-value": "id",
+                                                        attach: "",
+                                                        chips: "",
+                                                        label: "نقش ها",
+                                                        multiple: ""
+                                                      },
+                                                      model: {
+                                                        value:
+                                                          _vm.userEditDialog
+                                                            .roles,
+                                                        callback: function(
+                                                          $$v
+                                                        ) {
+                                                          _vm.$set(
+                                                            _vm.userEditDialog,
+                                                            "roles",
+                                                            $$v
+                                                          )
+                                                        },
+                                                        expression:
+                                                          "userEditDialog.roles"
                                                       }
                                                     })
                                                   ],

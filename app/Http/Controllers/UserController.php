@@ -6,18 +6,22 @@ use App\Activity;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function usersGet(){
-        $users=User::all();
+        $users=User::with('roles')->get();
         foreach ($users as $key => $loop) {
             $loop->jCreated_at = verta($loop->created_at)->formatJalaliDate();
             $loop->jCreated_atDiff = verta($loop->created_at)->formatDifference();
         }
+        $myId=Auth::id();
+        $me=User::find($myId)->with('roles')->first();
         return response()->json([
             'all' => $users,
-            'me' => Auth::user()
+            'me' => $me,
+            'rolesAll' => Role::all(),
         ]) ;
     }
 
@@ -55,8 +59,10 @@ class UserController extends Controller
             $image->move($destinationPath, $name);
             $user->avatar = $name;
         }
+        $user->syncRoles($userPost->roles);
 
-            $user->save();
+
+        $user->save();
         $user =  Auth::user();
 
         $activity = new Activity([
