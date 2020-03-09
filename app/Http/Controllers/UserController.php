@@ -18,10 +18,12 @@ class UserController extends Controller
         }
         $myId=Auth::id();
         $me=User::find($myId)->with('roles')->first();
+        $myRoles=$me->roles;
         return response()->json([
             'all' => $users,
             'me' => $me,
             'rolesAll' => Role::all(),
+            'myRoles' => $myRoles,
         ]) ;
     }
 

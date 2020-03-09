@@ -1,6 +1,8 @@
 <template>
+    <div>
     <v-container
         fluid
+        v-if="users.me.can['user-list']"
     >
         <v-snackbar
                 v-model="snackbar"
@@ -248,10 +250,10 @@
                                     <!--<v-icon color="success">mdi-account-details</v-icon>-->
                                     <!--</v-btn>-->
                                     <v-spacer></v-spacer>
-                                    <v-btn text icon small fab @click="userEditDialog=user,editUser=true">
+                                    <v-btn text icon small fab @click="userEditDialog=user,editUser=true" v-if="users.me.can['user-update']">
                                     <v-icon>mdi-account-edit</v-icon>
                                     </v-btn>
-                                    <v-btn text icon small @click="dialog=true,delete_id=user.id,delete_name=user.name" v-if="user.id!=users.me.id">
+                                    <v-btn text icon small @click="dialog=true,delete_id=user.id,delete_name=user.name" v-if="user.id!=users.me.id&&users.me.can['user-del']">
                                         <v-icon color="red">mdi-account-cancel</v-icon>
                                     </v-btn>
                                 </v-card-actions>
@@ -425,6 +427,8 @@
             </v-container>
         </v-item-group>
     </v-container>
+<e403 v-else></e403>
+    </div>
 </template>
 
 <script>

@@ -30,6 +30,8 @@ Vue.component('activityReportList', require('./components/services/ActivityRepor
 //Forms
 Vue.component('activity-input', require('./components/Forms/ActivityInput').default);
 
+//403
+Vue.component('e403', require('./components/services/e403').default);
 
 const router = new VueRouter({
     mode: 'history',
