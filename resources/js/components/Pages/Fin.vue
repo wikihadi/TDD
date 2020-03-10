@@ -6,7 +6,15 @@
 
 <script>
     export default {
-        name: "Fin"
+        name: "Fin",
+        watch: {
+            $route: {
+                immediate: true,
+                handler(to, from) {
+                    document.title = to.meta.title;
+                }
+            },
+        },
     }
 </script>
 

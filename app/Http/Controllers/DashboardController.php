@@ -7,6 +7,7 @@ use App\Notifications\newUserRegistered;
 use App\User;
 use Carbon\Carbon;
 use Carbon\Traits\Date;
+use Hekmatinasser\Verta\Verta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -45,5 +46,13 @@ class DashboardController extends Controller
         $d=Carbon::now();
 
         return view('dashboard',compact('d','user'));
+    }
+    public function read(){
+        return response()->json([
+            'me' => Auth::user(),
+            'jD' => verta(Verta::now())->formatWord('dS ') . verta(Verta::now())->format('%B %Y'),
+            'jDYesterday' => verta(Verta::yesterday())->formatWord('dS ') . verta(Verta::now())->format('%B %Y'),
+            'today' => verta(Verta::now())->format('l'),
+        ]) ;
     }
 }

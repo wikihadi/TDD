@@ -49,17 +49,17 @@
                         </router-link>
                     </v-list-group>
 
-                    <router-link to="/dashboard/fin">
-                        <v-list-item @click="">
-                            <v-list-item-content>
-                                <v-list-item-title class="text-right">مالی</v-list-item-title>
-                            </v-list-item-content>
-                            <v-spacer></v-spacer>
-                            <v-list-item-action>
-                                <v-icon>mdi-currency-usd</v-icon>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </router-link>
+                    <!--<router-link to="/dashboard/fin">-->
+                        <!--<v-list-item @click="">-->
+                            <!--<v-list-item-content>-->
+                                <!--<v-list-item-title class="text-right">مالی</v-list-item-title>-->
+                            <!--</v-list-item-content>-->
+                            <!--<v-spacer></v-spacer>-->
+                            <!--<v-list-item-action>-->
+                                <!--<v-icon>mdi-currency-usd</v-icon>-->
+                            <!--</v-list-item-action>-->
+                        <!--</v-list-item>-->
+                    <!--</router-link>-->
 
                     <v-list-group
                     >
@@ -75,7 +75,6 @@
                                 <v-icon>mdi-phone</v-icon>
                             </v-list-item-action>
                         </v-list-item>
-
                     </v-list-group>
 
 
@@ -112,6 +111,45 @@
                 </v-list-group>
 
 
+                <v-list-group
+                >
+                    <template v-slot:activator>
+                        <v-list-item-title class="text-right">لینک</v-list-item-title>
+                    </template>
+                    <a href="http://time.ir" target="_blank">
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">تقویم time.ir</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-calendar</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </a>
+                    <a href="https://translate.google.com/#view=home&op=translate&sl=en&tl=fa" target="_blank">
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">مترجم گوگل</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-translate</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </a>
+                    <a href="http://thestocks.im" target="_blank">
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title class="text-right">منابع استوک</v-list-item-title>
+                            </v-list-item-content>
+                            <v-spacer></v-spacer>
+                            <v-list-item-action>
+                                <v-icon>mdi-image-search-outline</v-icon>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </a>
+                </v-list-group>
 
             </v-list>
             <!--//menu-->
@@ -217,6 +255,14 @@
 
 <script>
     export default {
+        watch: {
+            $route: {
+                immediate: true,
+                handler(to, from) {
+                    document.title = to.meta.title;
+                }
+            },
+        },
         props:['user','d'],
         data: () => ({
             drawer: null,

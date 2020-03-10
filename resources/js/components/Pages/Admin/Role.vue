@@ -370,6 +370,14 @@
 <script>
     export default {
         name: "Role",
+        watch: {
+            $route: {
+                immediate: true,
+                handler(to, from) {
+                    document.title = to.meta.title;
+                }
+            },
+        },
         data: () => ({
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             // user_id:document.head.querySelector("meta[name=user_id]").content,
