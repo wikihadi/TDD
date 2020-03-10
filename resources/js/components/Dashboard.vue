@@ -81,11 +81,12 @@
 
                 </v-list-item-group>
                 <v-list-group
+                        v-if="user.can['admin']"
                 >
                     <template v-slot:activator>
                         <v-list-item-title class="text-right">مدیریت</v-list-item-title>
                     </template>
-                    <router-link to="/dashboard/admin/users">
+                    <router-link to="/dashboard/admin/users" v-if="user.can['user-list']">
                         <v-list-item @click="">
                             <v-list-item-content>
                                 <v-list-item-title class="text-right">کاربران</v-list-item-title>
@@ -96,7 +97,7 @@
                             </v-list-item-action>
                         </v-list-item>
                     </router-link>
-                    <router-link to="/dashboard/admin/roles">
+                    <router-link to="/dashboard/admin/roles"  v-if="user.can['role-list']&&user.can['permission-list']">
                         <v-list-item @click="">
                             <v-list-item-content>
                                 <v-list-item-title class="text-right">نقش کاربری</v-list-item-title>

@@ -2,6 +2,7 @@
     <v-app>
     <v-container
         fluid
+        v-if="all.me.can['role-list']&&all.me.can['permission-list']"
     >
         <v-snackbar
             v-model="snackbar"
@@ -67,12 +68,14 @@
 
 
 
-                    <v-col v-if="!showPermissions">
+                    <v-col v-if="!showPermissions"
+                    >
                         <v-card>
                             <v-card-title>
 
 
-                                <v-dialog v-model="addRole" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                <v-dialog v-model="addRole" fullscreen hide-overlay transition="dialog-bottom-transition"
+                                v-if="all.me.can['role-add']">
                                     <template v-slot:activator="{ on }">
                                         <v-btn text icon color="green" v-on="on">
                                             <v-icon>mdi-plus-circle</v-icon>
@@ -124,7 +127,8 @@
 
 
 
-                                <v-dialog v-model="updateRole" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                <v-dialog v-model="updateRole" fullscreen hide-overlay transition="dialog-bottom-transition"
+                                          v-if="all.me.can['role-update']">
                                     <v-card>
                                         <form @submit.prevent="uRole(idURole)">
                                         <v-toolbar dark color="amber">
@@ -178,7 +182,7 @@
                                     <thead>
                                     <tr>
                                         <th class="text-right">عنوان</th>
-                                        <th class="text-left">عملیات</th>
+                                        <th class="text-left" v-if="all.me.can['role-del']||all.me.can['role-update']">عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -203,12 +207,14 @@
                                                 No Permission
                                             </span>
                                         </td>
-                                        <td class="text-left">
-                                            <v-btn text icon color="primary" @click="updateRoleOn(item.id,item.name,item.permissions)">
+                                        <td class="text-left" v-if="all.me.can['role-del']||all.me.can['role-update']">
+                                            <v-btn text icon color="primary" @click="updateRoleOn(item.id,item.name,item.permissions)"
+                                                   v-if="all.me.can['role-update']">
                                                 <v-icon>mdi-pencil</v-icon>
                                             </v-btn>
 
-                                            <v-dialog v-model="dialogRoleDel" persistent max-width="290">
+                                            <v-dialog v-model="dialogRoleDel" persistent max-width="290"
+                                                      v-if="all.me.can['role-del']">
                                                 <template v-slot:activator="{ on }">
                                                     <v-btn text icon color="secondary" v-on="on">
                                                     <v-icon>mdi-delete</v-icon>
@@ -236,10 +242,12 @@
 
 
 
-                    <v-col v-if="showPermissions">
+                    <v-col v-if="showPermissions"
+                    >
                         <v-card>
                             <v-card-title>
-                                <v-dialog v-model="addPer" fullscreen hide-overlay transition="dialog-bottom-transition">
+                                <v-dialog v-model="addPer" fullscreen hide-overlay transition="dialog-bottom-transition"
+                                          v-if="all.me.can['permission-add']">
                                     <template v-slot:activator="{ on }">
                                         <v-btn text icon color="green" v-on="on">
                                             <v-icon>mdi-plus-circle</v-icon>
@@ -289,13 +297,15 @@
                                     <thead>
                                     <tr>
                                         <th class="text-right">عنوان</th>
-                                        <th class="text-left">عملیات</th>
+                                        <th class="text-left"
+                                            v-if="all.me.can['permission-del']||all.me.can['permission-update']"
+                                        >عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="item in all.permissions" :key="item.name">
                                         <td class="text-right">{{ item.name }}</td>
-                                        <td class="text-left">
+                                        <td class="text-left" v-if="all.me.can['permission-del']||all.me.can['permission-update']">
                                             <!--<v-btn text icon color="primary">-->
                                                 <!--<v-icon>mdi-pencil</v-icon>-->
                                             <!--</v-btn>-->
@@ -319,13 +329,14 @@
 
 
 
-                                            <v-btn text icon color="secondary" @click="dialogPermissionOpen(item.id,item.name)">
+                                            <v-btn text icon color="secondary" @click="dialogPermissionOpen(item.id,item.name)"
+                                                   v-if="all.me.can['permission-del']">
                                                 <v-icon>mdi-delete</v-icon>
                                             </v-btn>
                                         </td>
                                     </tr>
 
-                                    <v-dialog v-model="dialogPermission" persistent max-width="290">
+                                    <v-dialog v-model="dialogPermission" persistent max-width="290" v-if="all.me.can['permission-del']">
                                     <v-card>
                                     <v-card-title class="headline">حذف دسترسی</v-card-title>
                                     <v-card-text>آیا از حذف {{dialogPermissionName}} اطمینان دارید؟</v-card-text>
@@ -346,6 +357,7 @@
             </v-container>
         </v-item-group>
     </v-container>
+        <e403 v-else></e403>
 
 
 

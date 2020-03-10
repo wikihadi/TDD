@@ -28,7 +28,8 @@ class RoleController extends Controller
     public function usersRolePerGet(){
         return response()->json([
             'permissions' => Permission::all(),
-            'roles' => Role::with('permissions')->get()
+            'roles' => Role::with('permissions')->get(),
+            'me' => Auth::user()
         ]) ;
     }
 
