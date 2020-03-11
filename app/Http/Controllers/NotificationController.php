@@ -16,9 +16,20 @@ class NotificationController extends Controller
 
     public function read(){
         $user = Auth::user();
+        $userUnReadNotifications=$user->unReadNotifications;
+        $userReadNotifications=$user->readNotifications;
+
+        foreach ($userUnReadNotifications as $key => $loop) {
+            $loop->jCreated_at = verta($loop->created_at)->formatJalaliDate();
+            $loop->jCreated_atDiff = verta($loop->created_at)->formatDifference();
+        }
+        foreach ($userReadNotifications as $key => $loop) {
+            $loop->jCreated_at = verta($loop->created_at)->formatJalaliDate();
+            $loop->jCreated_atDiff = verta($loop->created_at)->formatDifference();
+        }
         return response()->json([
-            'unReadNotifications' => $user->unReadNotifications,
-            'readNotifications' => $user->readNotifications
+            'unReadNotifications' => $userUnReadNotifications,
+            'readNotifications' => $userReadNotifications
         ]);
     }
     public function markAllAsRead(){
@@ -31,9 +42,6 @@ class NotificationController extends Controller
             'user_name'   => $user->name,
         ]);
         $activity->save();
-        return response()->json([
-            'unReadNotifications' => $user->unReadNotifications,
-            'readNotifications' => $user->readNotifications
-        ]);
+        $this->read();
     }
 }

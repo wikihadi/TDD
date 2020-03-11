@@ -1,5 +1,5 @@
 <template>
-    <v-menu open-on-hover>
+    <v-menu>
         <template v-slot:activator="{ on }">
             <v-btn
                 dark
@@ -29,7 +29,7 @@
                     <!--</v-list-item-action>-->
             <!--</v-list-item>-->
                 <!--</v-list>-->
-        <v-list rounded>
+        <v-list rounded v-if="notifications.unReadNotifications.length>0">
         <v-list-item
                 v-for="notification in notifications.unReadNotifications"
                 :key="notification.id"
@@ -37,13 +37,13 @@
             >
                     <v-list-item-avatar>
                     <v-icon
-                        :class="'green white--text'"
+                        :class="'warning white--text'"
                         v-text="'mdi-bell'"
                     ></v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content class="text-right">
-                    <v-list-item-title v-text="notification.data.activity.note"></v-list-item-title>
-                    <v-list-item-subtitle v-text="notification.data.activity.created_at"></v-list-item-subtitle>
+                    <v-list-item-title>{{notification.data.activity.note}} توسط {{notification.data.activity.user_name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{notification.jCreated_atDiff}}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                     <v-btn icon>
@@ -53,36 +53,51 @@
 
             </v-list-item>
         </v-list>
-
-        <v-list rounded dense>
-            <v-list-item
-                v-for="notification in notifications.readNotifications"
-                :key="notification.id"
-                @click=""
-            >
-                <v-list-item-avatar>
+        <v-list rounded v-else>
+        <v-list-item>
+                    <v-list-item-avatar>
                     <v-icon
-                        :class="'amber white--text'"
-                        v-text="'mdi-bell'"
+                        :class="'success white--text'"
+                        v-text="'mdi-check'"
                     ></v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content class="text-right">
-                    <v-list-item-title v-text="notification.data.activity.note"></v-list-item-title>
-                    <v-list-item-subtitle v-text="notification.data.activity.created_at"></v-list-item-subtitle>
+                    <v-list-item-title>اعلان جدیدی وجود ندارد</v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-action>
-                    <v-btn icon>
-                        <v-icon color="grey lighten-1">mdi-information</v-icon>
-                    </v-btn>
-                </v-list-item-action>
+
 
             </v-list-item>
-
-
-
-
-
         </v-list>
+
+        <!--<v-list rounded dense v-if="notifications.readNotifications.length>0">-->
+            <!--<v-list-item-->
+                <!--v-for="notification in notifications.readNotifications"-->
+                <!--:key="notification.id"-->
+                <!--@click=""-->
+            <!--&gt;-->
+                <!--<v-list-item-avatar>-->
+                    <!--<v-icon-->
+                        <!--:class="'secondary white&#45;&#45;text'"-->
+                        <!--v-text="'mdi-bell'"-->
+                    <!--&gt;</v-icon>-->
+                <!--</v-list-item-avatar>-->
+                <!--<v-list-item-content class="text-right">-->
+                    <!--<v-list-item-title v-text="notification.data.activity.note"></v-list-item-title>-->
+                    <!--<v-list-item-subtitle>{{notification.jCreated_atDiff}}</v-list-item-subtitle>-->
+                <!--</v-list-item-content>-->
+                <!--<v-list-item-action>-->
+                    <!--<v-btn icon>-->
+                        <!--<v-icon color="grey lighten-1">mdi-information</v-icon>-->
+                    <!--</v-btn>-->
+                <!--</v-list-item-action>-->
+
+            <!--</v-list-item>-->
+
+
+
+
+
+        <!--</v-list>-->
         <v-bottom-navigation
             color="deep-purple accent-4"
         >

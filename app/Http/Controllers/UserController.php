@@ -76,6 +76,8 @@ class UserController extends Controller
                 'user_id'   => $actUser->id,
                 'user_name'   => $actUser->name,
             ]);
+            $activity->save();
+
             Notification::send($userNotif, new newUserRegistered($activity));
         }else{
             $activity = new Activity([
@@ -84,8 +86,9 @@ class UserController extends Controller
                 'user_id'   => $actUser->id,
                 'user_name'   => $actUser->name,
             ]);
+            $activity->save();
+
         }
-        $activity->save();
 
         $user->save();
 
