@@ -80,7 +80,7 @@
                                                             small
                                                             v-for="r in user.roles"
                                                             :key="r.id"
-                                                            color="amber"
+                                                            color="success"
                                                     >
                                                         {{r.name}}
                                                     </v-chip>
@@ -88,7 +88,7 @@
                                                             v-if="user.roles.length<1"
                                                             class="ma-2"
                                                             small
-                                                            color="red"
+                                                            color="warning"
                                                     >
                                                         بدون نقش
                                                     </v-chip>
@@ -396,17 +396,20 @@
                                                                 label="توضیحات کاربر"
                                                         ></v-text-field>
                                                     </v-col>
-                                                    <v-col md="12">
+                                                    <v-col md="12" v-if="users.me.can['assign-role']">
+                                                        <v-switch v-model="changeRole" label="تغییر نقش کاربری"></v-switch>
+
                                                         <v-select
+                                                                v-if="changeRole"
                                                                 :hint="'این قسمت توسط مدیر تکمیل می گردد'"
                                                                 v-model="userEditDialog.roles"
                                                                 :items="users.rolesAll"
                                                                 item-text="name"
-                                                                item-value="id"
                                                                 attach
                                                                 chips
                                                                 label="نقش ها"
                                                                 multiple
+                                                                @change="changedRole=true"
                                                         ></v-select>
                                                     </v-col>
                                                     <v-col sm="12">
@@ -458,6 +461,8 @@
             editUser:false,
             userEditDialog:[],
             avatar:'',
+            changeRole:false,
+            changedRole:false,
         }),
         mounted() {
             this.read();
@@ -468,16 +473,22 @@
                     headers: { 'content-type': 'multipart/form-data' }
                 };
                 let json_userEditDialog = JSON.stringify(this.userEditDialog);
+                // let roleArray=[];
+                // roleArray.push(userEditDialog.roles)
 
                 let formData = new FormData();
                 formData.append('user', json_userEditDialog);
                 formData.append('avatar', this.avatar);
                 formData.append('_token', this.csrf);
+                formData.append('changedRole', this.changedRole);
+
                 axios.post('/admin/users/update', formData, config)
                     .then(
                         this.read(0),
                         this.editUser=false,
                         this.userEditDialog=[],
+                        this.changeRole=false,
+                        this.changedRole=false,
                         this.snackbarOn('کاربر با موفقیت ویرایش شد','dark','green',2000)
                     )
                     .catch(function (error) {

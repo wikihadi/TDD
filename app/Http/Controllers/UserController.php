@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Activity;
+use App\Notifications\newUserRegistered;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -61,19 +63,33 @@ class UserController extends Controller
             $image->move($destinationPath, $name);
             $user->avatar = $name;
         }
-        $user->syncRoles($userPost->roles);
+        $userNotif=$user;
+        $actUser=Auth::user();
 
+        if ($request['changedRole']==='true') {
+            $user->syncRoles($userPost->roles);
+
+
+            $activity = new Activity([
+                'code'    => 8002,
+                'note'   => 'ویرایش نقش کاربری',
+                'user_id'   => $actUser->id,
+                'user_name'   => $actUser->name,
+            ]);
+            Notification::send($userNotif, new newUserRegistered($activity));
+        }else{
+            $activity = new Activity([
+                'code'    => 8002,
+                'note'   => 'ویرایش کاربر',
+                'user_id'   => $actUser->id,
+                'user_name'   => $actUser->name,
+            ]);
+        }
+        $activity->save();
 
         $user->save();
-        $user =  Auth::user();
 
-        $activity = new Activity([
-            'code'    => 8002,
-            'note'   => 'ویرایش کاربر',
-            'user_id'   => $user->id,
-            'user_name'   => $user->name,
-        ]);
-        $activity->save();
+
         return $this->usersGet();
     }
 

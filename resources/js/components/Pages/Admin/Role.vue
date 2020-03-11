@@ -56,11 +56,11 @@
                     <v-btn icon text>
                         <v-icon color="eee" @click="read(1)">mdi-refresh</v-icon>
                     </v-btn>
-                    <router-link to="/dashboard/admin/help">
-                        <v-btn icon text>
-                            <v-icon color="eee" @click="">mdi-lifebuoy</v-icon>
-                        </v-btn>
-                    </router-link>
+                    <!--<router-link to="/dashboard/admin/help">-->
+                        <!--<v-btn icon text>-->
+                            <!--<v-icon color="eee" @click="">mdi-lifebuoy</v-icon>-->
+                        <!--</v-btn>-->
+                    <!--</router-link>-->
 
                 </v-subheader>
                 <v-row>
