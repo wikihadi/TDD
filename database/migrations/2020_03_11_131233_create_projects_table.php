@@ -18,8 +18,10 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             $table->string('type')->nullable();
             $table->text('note')->nullable();
-            $table->integer('user_id');
-            $table->integer('owner_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('owner_id')->nullable();
+            $table->foreign('owner_id')->references('id')->on('users');
             $table->string('status')->default(0)->nullable();
             $table->date('deadline')->nullable();
             $table->timestamps();

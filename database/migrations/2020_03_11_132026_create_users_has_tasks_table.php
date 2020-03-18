@@ -14,8 +14,11 @@ class CreateUsersHasTasksTable extends Migration
     public function up()
     {
         Schema::create('users_has_tasks', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('task_id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('task_id');
+            $table->foreign('task_id')->references('id')->on('tasks');
             $table->integer('order');
             $table->timestamps();
         });

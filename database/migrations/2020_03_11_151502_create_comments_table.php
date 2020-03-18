@@ -17,9 +17,13 @@ class CreateCommentsTable extends Migration
             $table->bigIncrements('id');
             $table->text('note')->nullable();
             $table->string('file')->nullable();
-            $table->integer('user_id');
-            $table->integer('task_id')->nullable();
-            $table->integer('project_id')->nullable();
+            $table->string('type')->default('comment');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('task_id')->nullable();
+            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->unsignedBigInteger('project_id')->nullable();
+            $table->foreign('project_id')->references('id')->on('projects');
             $table->timestamps();
         });
     }

@@ -18,10 +18,12 @@ class CreateActivitiesTable extends Migration
             $table->integer('code')->default(0);
             $table->string('note')->nullable();
             $table->text('comment')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('user_name')->nullable();
 //            $table->integer('to_user')->nullable();
-            $table->integer('contact_id')->nullable();
+            $table->unsignedBigInteger('contact_id')->nullable();
+            $table->foreign('contact_id')->references('id')->on('contacts');
 //            $table->integer('media_id')->nullable();
 //            $table->integer('post_id')->nullable();
 //            $table->integer('re_id')->nullable();

@@ -17,9 +17,12 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('note')->nullable();
-            $table->integer('project_id');
-            $table->integer('user_id');
-            $table->integer('owner_id');
+            $table->unsignedBigInteger('project_id');
+            $table->foreign('project_id')->references('id')->on('projects');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('owner_id')->nullable();
+            $table->foreign('owner_id')->references('id')->on('users');
             $table->integer('priority')->default(0);
             $table->timestamps();
         });
